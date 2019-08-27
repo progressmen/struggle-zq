@@ -9,7 +9,7 @@ class Btc extends Model {
 
     public function getName()
     {
-        return 'name1';
+        return 'namewanmei';
     }
 
 }
