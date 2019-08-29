@@ -40,6 +40,6 @@ class BtcConsole extends Command
     {
 
         $btcObj = new Btc();
-        $btcObj->currencys();
+        $btcObj->symbols();
     }
 }

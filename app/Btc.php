@@ -23,7 +23,21 @@ class Btc extends Model {
     }
 
     /**
-     * 获取交易对
+     * 获取所有交易对
+     * @return string
+     */
+    public function symbols()
+    {
+        $path = 'v1/common/symbols';
+        $sign = $this->getSign($path);
+        $params['sign'] = $sign;
+        $url = $this->buildUrl($path);
+        $result = self::sendCurl($url, $params);
+        echo json_encode($result);
+    }
+
+    /**
+     * 获取所有币种
      * @return string
      */
     public function currencys()
@@ -31,12 +45,14 @@ class Btc extends Model {
         $path = 'v1/common/currencys';
         $sign = $this->getSign($path);
         $params['sign'] = $sign;
-        $url = $this->protocl . $this->huobiUrl;
+        $url = $this->buildUrl($path);
         $result = self::sendCurl($url, $params);
         echo json_encode($result);
     }
 
 
+
+    // ====== common private ========//
 
     /**
      * @param $request
@@ -44,7 +60,7 @@ class Btc extends Model {
      * @param string $method
      * @return string
      */
-    public function getSign($requestMethod, $params = [], $method = 'GET')
+    private function getSign($requestMethod, $params = [], $method = 'GET')
     {
         ksort($params);
         $sign = strtoupper($method) . "\n";
@@ -106,6 +122,16 @@ class Btc extends Model {
         $httpInfo = array_merge($httpInfo, curl_getinfo($ch));
         curl_close($ch);
         return $response;
+    }
+
+    /**
+     * 组装url
+     * @param $path
+     * @return string
+     */
+    private function buildUrl($path)
+    {
+        return $this->protocl . $this->huobiUrl . '/' . $path;
     }
 
 }
