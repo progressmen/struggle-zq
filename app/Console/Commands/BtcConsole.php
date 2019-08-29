@@ -38,8 +38,8 @@ class BtcConsole extends Command
      */
     public function handle()
     {
+
         $btcObj = new Btc();
-        $name = $btcObj->getName();
-        echo $name;
+        $btcObj->currencys();
     }
 }
