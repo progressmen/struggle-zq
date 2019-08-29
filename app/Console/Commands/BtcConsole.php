@@ -12,7 +12,7 @@ class BtcConsole extends Command
      *
      * @var string
      */
-    protected $signature = 'checkBtcDeal';
+    protected $signature = 'btc {comma?}';
 
     /**
      * The console command description.
@@ -38,8 +38,13 @@ class BtcConsole extends Command
      */
     public function handle()
     {
-
+        $command = $this->argument('comma');
         $btcObj = new Btc();
-        $btcObj->symbols();
+        if (empty($command)) {
+            $btcObj->accounts();
+        } else {
+            $btcObj->$command();
+        }
+
     }
 }
