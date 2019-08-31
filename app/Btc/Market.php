@@ -52,7 +52,42 @@ class Market extends Base
         $params['sign'] = $sign;
         $url = $this->buildUrl($path);
         $result = self::sendCurl($url, $params);
-        echo json_encode($result);
+
+        //处理数据
+        $data = json_decode($result, true);
+        $usdt = $btc = $eth = $ht = [];
+        foreach($data as $value){
+            if (substr($value['symbol'], 0, -4) == 'usdt') {
+                $sys = $value['close'] - $value['open'];
+                $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
+                $usdt[] = $value;
+            } elseif (substr($value['symbol'], 0, -3) == 'btc') {
+                $sys = $value['close'] - $value['open'];
+                $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
+                $btc[] = $value;
+            } elseif (substr($value['symbol'], 0, -3) == 'eth') {
+                $sys = $value['close'] - $value['open'];
+                $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
+                $eth[] = $value;
+            } elseif (substr($value['symbol'], 0, -2) == 'ht') {
+                $sys = $value['close'] - $value['open'];
+                $value['percent'] = floatval(sprintf("%.2f", $sys / $value['open'] * 100));
+                $ht[] = $value;
+            }
+        }
+        $percents = array_column($usdt,'percent');
+        array_multisort($percents,SORT_DESC, $usdt);
+        $output['usdt'] = $usdt;
+        $percents = array_column($btc,'percent');
+        array_multisort($percents,SORT_DESC, $btc);
+        $output['btc'] = $btc;
+        $percents = array_column($eth,'percent');
+        array_multisort($percents,SORT_DESC, $eth);
+        $output['eth'] = $eth;
+        $percents = array_column($ht,'percent');
+        array_multisort($percents,SORT_DESC, $ht);
+        $output['ht'] = $ht;
+        echo json_encode($output);
     }
 
 
