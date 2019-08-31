@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * 基础信息相关
+ */
 namespace App\Btc;
 
 
@@ -39,23 +41,22 @@ class Btc extends Base {
         echo json_encode($result);
     }
 
-
     /**
-     * K 线数据（蜡烛图）
-     * @param $params
-     * symbol	string	true	NA	交易对	btcusdt, ethbtc...
-     * period	string	true	NA	返回数据时间粒度，也就是每根蜡烛的时间区间	1min, 5min, 15min, 30min, 60min, 1day, 1mon, 1week, 1year
-     * size	    integer	false	150	返回 K 线数据条数	[1, 2000]
+     * 获取当前系统时间
+     * 此接口返回当前的系统时间，时间是调整为北京时间的时间戳，单位毫秒。
      */
-    public function kline($params)
+    public function getTimestamp()
     {
-        $path = 'market/history/kline';
-        $sign = $this->getSign($path, $params);
+        $path = 'v1/common/timestamp';
+        $sign = $this->getSign($path);
         $params['sign'] = $sign;
         $url = $this->buildUrl($path);
         $result = self::sendCurl($url, $params);
         echo json_encode($result);
     }
+
+
+
 
 
 }
