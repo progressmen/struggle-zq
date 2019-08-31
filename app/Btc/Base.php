@@ -21,9 +21,6 @@ class Base extends Model
     }
 
 
-
-    /********************** common private **********************/
-
     /**
      * @param $request
      * @param $params

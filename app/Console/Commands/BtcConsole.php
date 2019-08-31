@@ -39,9 +39,9 @@ class BtcConsole extends Command
     public function handle()
     {
         $command = $this->argument('comma');
-        $btcObj = new Btc\Btc();
+        $btcObj = new Btc\Wallet();
         if (empty($command)) {
-            $btcObj->accounts();
+            $btcObj->depositAndWithdraw();
         } else {
             $btcObj->$command();
         }
