@@ -60,22 +60,22 @@ class Market extends Base
             $usdt = $btc = $eth = $ht = [];
             $time = date('YmdHis', intval($result['ts']/1000));
             foreach($result['data'] as $value){
-                if (substr($value['symbol'], 0, -4) == 'usdt') {
+                if (substr($value['symbol'], -4) == 'usdt') {
                     $sys = $value['close'] - $value['open'];
                     $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
                     $value['time'] = $time;
                     $usdt[] = $value;
-                } elseif (substr($value['symbol'], 0, -3) == 'btc') {
+                } elseif (substr($value['symbol'], -3) == 'btc') {
                     $sys = $value['close'] - $value['open'];
                     $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
                     $value['time'] = $time;
                     $btc[] = $value;
-                } elseif (substr($value['symbol'], 0, -3) == 'eth') {
+                } elseif (substr($value['symbol'], -3) == 'eth') {
                     $sys = $value['close'] - $value['open'];
                     $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
                     $value['time'] = $time;
                     $eth[] = $value;
-                } elseif (substr($value['symbol'], 0, -2) == 'ht') {
+                } elseif (substr($value['symbol'],  -2) == 'ht') {
                     $sys = $value['close'] - $value['open'];
                     $value['percent'] = floatval(sprintf("%.2f", $sys / $value['open'] * 100));
                     $value['time'] = $time;
