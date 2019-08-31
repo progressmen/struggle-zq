@@ -18,6 +18,7 @@ class Base extends Model
         parent::__construct($attributes);
         $this->accessKey = env('HUOBI_ACCESS_KEY');
         $this->secretKey = env('HUOBI_SECRET_KEY');
+        date_default_timezone_set("PRC");
     }
 
 

@@ -54,39 +54,47 @@ class Market extends Base
         $result = self::sendCurl($url, $params);
 
         //处理数据
-        $data = json_decode($result, true);
-        $usdt = $btc = $eth = $ht = [];
-        foreach($data as $value){
-            if (substr($value['symbol'], 0, -4) == 'usdt') {
-                $sys = $value['close'] - $value['open'];
-                $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
-                $usdt[] = $value;
-            } elseif (substr($value['symbol'], 0, -3) == 'btc') {
-                $sys = $value['close'] - $value['open'];
-                $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
-                $btc[] = $value;
-            } elseif (substr($value['symbol'], 0, -3) == 'eth') {
-                $sys = $value['close'] - $value['open'];
-                $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
-                $eth[] = $value;
-            } elseif (substr($value['symbol'], 0, -2) == 'ht') {
-                $sys = $value['close'] - $value['open'];
-                $value['percent'] = floatval(sprintf("%.2f", $sys / $value['open'] * 100));
-                $ht[] = $value;
+        $result = json_decode($result, true);
+        $output = [];
+        if($result['status'] == 'ok'){
+            $usdt = $btc = $eth = $ht = [];
+            $time = date('YmdHis', intval($result['ts']/1000));
+            foreach($result['data'] as $value){
+                if (substr($value['symbol'], 0, -4) == 'usdt') {
+                    $sys = $value['close'] - $value['open'];
+                    $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
+                    $value['time'] = $time;
+                    $usdt[] = $value;
+                } elseif (substr($value['symbol'], 0, -3) == 'btc') {
+                    $sys = $value['close'] - $value['open'];
+                    $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
+                    $value['time'] = $time;
+                    $btc[] = $value;
+                } elseif (substr($value['symbol'], 0, -3) == 'eth') {
+                    $sys = $value['close'] - $value['open'];
+                    $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
+                    $value['time'] = $time;
+                    $eth[] = $value;
+                } elseif (substr($value['symbol'], 0, -2) == 'ht') {
+                    $sys = $value['close'] - $value['open'];
+                    $value['percent'] = floatval(sprintf("%.2f", $sys / $value['open'] * 100));
+                    $value['time'] = $time;
+                    $ht[] = $value;
+                }
             }
+            $percents = array_column($usdt,'percent');
+            array_multisort($percents,SORT_DESC, $usdt);
+            $output['usdt'] = $usdt;
+            $percents = array_column($btc,'percent');
+            array_multisort($percents,SORT_DESC, $btc);
+            $output['btc'] = $btc;
+            $percents = array_column($eth,'percent');
+            array_multisort($percents,SORT_DESC, $eth);
+            $output['eth'] = $eth;
+            $percents = array_column($ht,'percent');
+            array_multisort($percents,SORT_DESC, $ht);
+            $output['ht'] = $ht;
         }
-        $percents = array_column($usdt,'percent');
-        array_multisort($percents,SORT_DESC, $usdt);
-        $output['usdt'] = $usdt;
-        $percents = array_column($btc,'percent');
-        array_multisort($percents,SORT_DESC, $btc);
-        $output['btc'] = $btc;
-        $percents = array_column($eth,'percent');
-        array_multisort($percents,SORT_DESC, $eth);
-        $output['eth'] = $eth;
-        $percents = array_column($ht,'percent');
-        array_multisort($percents,SORT_DESC, $ht);
-        $output['ht'] = $ht;
         echo json_encode($output);
     }
 
