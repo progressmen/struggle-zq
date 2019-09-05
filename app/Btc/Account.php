@@ -30,6 +30,6 @@ class Account extends HuobiBase
         $this->req_method = 'GET';
         $url = $this->create_sign_url([]);
         $result = $this->curl($url);
-        echo json_decode($result);
+        echo json_encode($result);
     }
 }
