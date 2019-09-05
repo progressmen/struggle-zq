@@ -11,9 +11,16 @@ class HuobiBase extends Model
     public $api_method = '';
     public $req_method = '';
 
+    private $accessKey = '';
+    private $secretKey = '';
+
+
     public function __construct() {
         $this->api = parse_url($this->url)['host'];
         date_default_timezone_set("Etc/GMT+0");
+        $this->accessKey = env('HUOBI_ACCESS_KEY');
+        $this->secretKey = env('HUOBI_SECRET_KEY');
+
     }
 
     /**
@@ -23,7 +30,7 @@ class HuobiBase extends Model
     public function create_sign_url($append_param = []) {
         // 验签参数
         $param = [
-            'AccessKeyId' => ACCESS_KEY,
+            'AccessKeyId' => $this->accessKey,
             'SignatureMethod' => 'HmacSHA256',
             'SignatureVersion' => 2,
             'Timestamp' => date('Y-m-d\TH:i:s', time())
@@ -50,7 +57,7 @@ class HuobiBase extends Model
     // 生成签名
     public function create_sig($param) {
         $sign_param_1 = $this->req_method."\n".$this->api."\n".$this->api_method."\n".implode('&', $param);
-        $signature = hash_hmac('sha256', $sign_param_1, SECRET_KEY, true);
+        $signature = hash_hmac('sha256', $sign_param_1, $this->secretKey, true);
         return base64_encode($signature);
     }
     public function curl($url,$postdata=[]) {
