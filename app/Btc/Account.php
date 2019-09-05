@@ -26,6 +26,7 @@ class Account extends HuobiBase
         $this->api_method = "/v1/common/timestamp";
         $this->req_method = 'GET';
         $url = $this->create_sign_url([]);
-        return json_decode($this->curl($url));
+        $result = $this->curl($url);
+        echo json_encode($result);
     }
 }
