@@ -39,7 +39,7 @@ class BtcConsole extends Command
     public function handle()
     {
         $command = $this->argument('comma');
-        $btcObj = new Btc\Market();
+        $btcObj = new Btc\Account();
         if (empty($command)) {
             $btcObj->tickers();
         } else {

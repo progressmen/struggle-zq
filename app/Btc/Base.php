@@ -30,6 +30,10 @@ class Base extends Model
      */
     public function getSign($requestMethod, $params = [], $method = 'GET')
     {
+        $params['SignatureMethod'] = 'HmacSHA256';
+        $params['SignatureVersion'] = 2;
+        $params['Timestamp'] = date('Y-m-d') . 'T' . date('H:i:s'); // 2017-05-11T15:19:30
+        $params['AccessKeyId'] = $this->accessKey;
         ksort($params);
         $sign = strtoupper($method) . "\n";
         $sign .= strtolower($this->huobiUrl) . "\n";
