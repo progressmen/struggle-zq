@@ -15,8 +15,10 @@ class Account extends Base
     public function accounts()
     {
         $path = '/v1/account/accounts';
-        $sign = $this->getSign($path);
-        $params['sign'] = $sign;
+        $params = $this->commonParams;
+        $sign = $this->getSign($path, $params);
+        $params['Signature'] = $sign;
+        $params = array_merge($params, $this->commonParams);
         $url = $this->buildUrl($path);
         $result = self::sendCurl($url, $params);
         echo json_encode($result);

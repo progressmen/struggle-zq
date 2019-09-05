@@ -12,6 +12,8 @@ class Base extends Model
     public $huobiUrl = 'api.huobi.pro';
     public $protocl = 'https://';
 
+    public $commonParams = [];
+
 
     public function __construct(array $attributes = [])
     {
@@ -19,6 +21,11 @@ class Base extends Model
         $this->accessKey = env('HUOBI_ACCESS_KEY');
         $this->secretKey = env('HUOBI_SECRET_KEY');
         date_default_timezone_set("PRC");
+
+        $this->commonParams['SignatureMethod'] = 'HmacSHA256';
+        $this->commonParams['SignatureVersion'] = 2;
+        $this->commonParams['Timestamp'] = date('Y-m-d') . 'T' . date('H:i:s'); // 2017-05-11T15:19:30
+        $this->commonParams['AccessKeyId'] = $this->accessKey;
     }
 
 
@@ -30,10 +37,6 @@ class Base extends Model
      */
     public function getSign($requestMethod, $params = [], $method = 'GET')
     {
-        $params['SignatureMethod'] = 'HmacSHA256';
-        $params['SignatureVersion'] = 2;
-        $params['Timestamp'] = date('Y-m-d') . 'T' . date('H:i:s'); // 2017-05-11T15:19:30
-        $params['AccessKeyId'] = $this->accessKey;
         ksort($params);
         $sign = strtoupper($method) . "\n";
         $sign .= strtolower($this->huobiUrl) . "\n";
@@ -43,7 +46,6 @@ class Base extends Model
             $sign .= $key. '='. $value . '&';
         }
         $sign = rtrim($sign, '&');
-        echo $sign;die;
         $sign = hash_hmac('sha256', $sign, $this->secretKey);
         return $sign;
     }
