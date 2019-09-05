@@ -24,7 +24,7 @@ class Base extends Model
 
         $this->commonParams['SignatureMethod'] = 'HmacSHA256';
         $this->commonParams['SignatureVersion'] = 2;
-        $this->commonParams['Timestamp'] = urlencode(date('Y-m-d') . 'T' . date('H:i:s')); // 2017-05-11T15:19:30
+        $this->commonParams['Timestamp'] = date('Y-m-d') . 'T' . date('H:i:s'); // 2017-05-11T15:19:30
         $this->commonParams['AccessKeyId'] = $this->accessKey;
     }
 
@@ -43,10 +43,10 @@ class Base extends Model
         $sign .= strtolower($requestMethod) . "\n";
 
         foreach ($params as $key => $value) {
-            $sign .= $key. '='. $value . '&';
+            $sign .= $key. '='. urlencode($value) . '&';
         }
         $sign = rtrim($sign, '&');
-        $sign = base64_encode(hash_hmac('sha256', $sign, $this->secretKey));
+        $sign = urlencode(base64_encode(hash_hmac('sha256', $sign, $this->secretKey, true)));
         return $sign;
     }
 
