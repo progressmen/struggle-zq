@@ -41,7 +41,7 @@ class BtcConsole extends Command
         $command = $this->argument('comma');
         $btcObj = new Btc\Account();
         if (empty($command)) {
-            $btcObj->tickers();
+            $btcObj->accounts();
         } else {
             $btcObj->$command();
         }

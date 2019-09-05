@@ -14,7 +14,7 @@ class Account extends Base
      */
     public function accounts()
     {
-        $path = 'v1/account/accounts';
+        $path = '/v1/account/accounts';
         $sign = $this->getSign($path);
         $params['sign'] = $sign;
         $url = $this->buildUrl($path);

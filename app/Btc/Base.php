@@ -43,6 +43,7 @@ class Base extends Model
             $sign .= $key. '='. $value . '&';
         }
         $sign = rtrim($sign, '&');
+        echo $sign;die;
         $sign = hash_hmac('sha256', $sign, $this->secretKey);
         return $sign;
     }
