@@ -12,7 +12,7 @@ class BtcConsole extends Command
      *
      * @var string
      */
-    protected $signature = 'btc {comma?}';
+    protected $signature = 'btc {cmd?}';
 
     /**
      * The console command description.
@@ -38,7 +38,7 @@ class BtcConsole extends Command
      */
     public function handle()
     {
-        $command = $this->argument('comma');
+        $command = $this->argument('cmd');
         $btcObj = new Btc\Account();
         if (empty($command)) {
             $btcObj->get_common_timestamp();

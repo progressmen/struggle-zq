@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('timestamp', function (App\Btc\Account $account) {
+    return $account->get_common_timestamp();
+});
+
+
+
