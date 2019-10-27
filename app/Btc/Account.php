@@ -52,7 +52,11 @@ class Account extends HuobiBase
                     $this->req_method = 'GET';
                     $url = $this->create_sign_url([]);
                     $result = $this->curl($url);
-                    echo $result;
+                    $result = json_decode($result, true);
+                    foreach ($result['data']['list'] as &$v){
+                        if(empty($v['balance'])) unset($v);
+                    }
+                    echo json_encode($result);
                 }
             }
         } else {
