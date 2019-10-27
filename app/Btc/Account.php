@@ -53,10 +53,13 @@ class Account extends HuobiBase
                     $url = $this->create_sign_url([]);
                     $result = $this->curl($url);
                     $result = json_decode($result, true);
-                    var_dump($result);die;
-                    foreach ($result['data']['list'] as &$v){
-                        if(empty($v['balance'])) unset($v);
+                    $newList = [];
+                    foreach ($result['data']['list'] as $v){
+                        if(!empty($v['balance'])) {
+                            $newList[] = $v;
+                        }
                     }
+                    $result['data']['list'] = $newList;
                     echo json_encode($result);
                 }
             }
