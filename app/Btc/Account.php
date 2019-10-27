@@ -44,6 +44,7 @@ class Account extends HuobiBase
         // 获取账户
         $accountData = $this->getAccountAccounts();
         $accountData = json_decode($accountData, true);
+        var_dump($accountData);die;
         if ($accountData['status'] == 'ok') {
             foreach ($accountData['data'] as $value) {
                 if($value['type'] == 'spot') {
