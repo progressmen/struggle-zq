@@ -16,12 +16,18 @@ Route::get('/', function () {
 });
 
 Route::get('timestamp', function (App\Btc\Account $timestamp) {
-    return $timestamp->get_common_timestamp();
+    return $timestamp->getCommonTimestamp();
 });
 
 Route::get('accounts', function (App\Btc\Account $account) {
-    return $account->get_account_accounts();
+    return $account->getAccountAccounts();
 });
+
+Route::get('balance', function (App\Btc\Account $account) {
+    return $account->getBalance();
+});
+
+Route::any('mail/send','MailController@send');
 
 
 

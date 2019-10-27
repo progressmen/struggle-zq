@@ -41,7 +41,7 @@ class BtcConsole extends Command
         $command = $this->argument('cmd');
         $btcObj = new Btc\Account();
         if (empty($command)) {
-            $btcObj->get_common_timestamp();
+            $btcObj->get_account_accounts();
         } else {
             $btcObj->$command();
         }
