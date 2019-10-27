@@ -20,7 +20,7 @@ class Account extends HuobiBase
         $this->req_method = 'GET';
         $url = $this->create_sign_url([]);
         $result = $this->curl($url);
-        return json_encode($result);
+        return $result;
     }
 
     /**
@@ -32,7 +32,7 @@ class Account extends HuobiBase
         $this->req_method = 'GET';
         $url = $this->create_sign_url([]);
         $result = $this->curl($url);
-        return json_encode($result);
+        return $result;
     }
 
     /**
@@ -44,7 +44,6 @@ class Account extends HuobiBase
         // 获取账户
         $accountData = $this->getAccountAccounts();
         $accountData = json_decode($accountData, true);
-        var_dump($accountData);die;
         if ($accountData['status'] == 'ok') {
             foreach ($accountData['data'] as $value) {
                 if($value['type'] == 'spot') {
@@ -53,7 +52,7 @@ class Account extends HuobiBase
                     $this->req_method = 'GET';
                     $url = $this->create_sign_url([]);
                     $result = $this->curl($url);
-                    echo json_encode($result);
+                    echo $result;
                 }
             }
         } else {
