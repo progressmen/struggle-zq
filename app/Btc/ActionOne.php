@@ -15,8 +15,13 @@ class ActionOne extends Base
         // 获取当前涨幅排名
         $marketObj = new Market();
         $tickerData = $marketObj->tickers();
+        $usdtData = $tickerData['usdt'];
 
-        echo json_encode($tickerData['usdt']);
+        foreach ($usdtData as $value) {
+            if($value['percent'] > 3){
+                echo json_encode($value);
+            }
+        }
 
         // 判断
     }

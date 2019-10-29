@@ -62,18 +62,8 @@ class Market extends Base
             foreach($result['data'] as $value){
 
                 $sys = $value['close'] - $value['open'];
-                if(empty($value['open'])){
-                    $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
-                }else{
-                    $value['percent'] = floatval(sprintf("%.2f",0));
-                }
+                $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
                 $value['time'] = $time;
-
-                // 处理数据格式
-                $value['close'] = 123123;
-                $value['open']  = floatval(sprintf("%.6f",$value['open']));
-                $value['high']  = floatval(sprintf("%.6f",$value['high']));
-                $value['low']   = floatval(sprintf("%.6f",$value['low']));
 
                 if (substr($value['symbol'], -4) == 'usdt') {
                     $usdt[] = $value;
@@ -84,8 +74,6 @@ class Market extends Base
                 } elseif (substr($value['symbol'],  -2) == 'ht') {
                     $ht[] = $value;
                 }
-
-
             }
 
             $percents = array_column($usdt,'percent');
