@@ -16,7 +16,7 @@ class ActionOne extends Base
         $marketObj = new Market();
         $tickerData = $marketObj->tickers();
 
-        echo json_encode($tickerData);
+        echo json_encode($tickerData['usdt']);
 
         // 判断
     }
