@@ -60,10 +60,10 @@ class Market extends Base
             $usdt = $btc = $eth = $ht = [];
             $time = date('YmdHis', intval($result['ts']/1000));
             foreach($result['data'] as $value){
-//                $value['close'] = sprintf("%.6f",$value['close']);
-//                $value['open'] = sprintf("%.6f",$value['open']);
-//                $value['high'] = sprintf("%.6f",$value['high']);
-//                $value['low'] = sprintf("%.6f",$value['low']);
+                $value['close'] = sprintf("%.6f",$value['close']);
+                $value['open']  = sprintf("%.6f",$value['open']);
+                $value['high']  = sprintf("%.6f",$value['high']);
+                $value['low']   = sprintf("%.6f",$value['low']);
                 if (substr($value['symbol'], -4) == 'usdt') {
                     $sys = $value['close'] - $value['open'];
                     $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
