@@ -69,6 +69,12 @@ class Market extends Base
                 }
                 $value['time'] = $time;
 
+                // 处理数据格式
+                $value['close'] = floatval(sprintf("%.6f",$value['close']));
+                $value['open']  = floatval(sprintf("%.6f",$value['open']));
+                $value['high']  = floatval(sprintf("%.6f",$value['high']));
+                $value['low']   = floatval(sprintf("%.6f",$value['low']));
+
                 if (substr($value['symbol'], -4) == 'usdt') {
                     $usdt[] = $value;
                 } elseif (substr($value['symbol'], -3) == 'btc') {
@@ -79,11 +85,7 @@ class Market extends Base
                     $ht[] = $value;
                 }
 
-                // 处理数据格式
-                $value['close'] = floatval(sprintf("%.6f",$value['close']));
-                $value['open']  = floatval(sprintf("%.6f",$value['open']));
-                $value['high']  = floatval(sprintf("%.6f",$value['high']));
-                $value['low']   = floatval(sprintf("%.6f",$value['low']));
+
             }
 
             $percents = array_column($usdt,'percent');
