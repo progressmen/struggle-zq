@@ -29,7 +29,7 @@ class CommonMail
         $subject = '邮件名称';
         Mail::send(
             'emails.test',
-            ['message' => 'test'],
+            ['name' => 'test'],
             function ($message) use($to, $subject) {
                 $message->to($to)->subject($subject);
             }
