@@ -60,32 +60,32 @@ class Market extends Base
             $usdt = $btc = $eth = $ht = [];
             $time = date('YmdHis', intval($result['ts']/1000));
             foreach($result['data'] as $value){
+
+                // 处理数据格式
                 $value['close'] = sprintf("%.6f",$value['close']);
                 $value['open']  = sprintf("%.6f",$value['open']);
                 $value['high']  = sprintf("%.6f",$value['high']);
                 $value['low']   = sprintf("%.6f",$value['low']);
-                if (substr($value['symbol'], -4) == 'usdt') {
-                    $sys = $value['close'] - $value['open'];
+
+                $sys = $value['close'] - $value['open'];
+                if(empty($value['open'])){
                     $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
-                    $value['time'] = $time;
+                }else{
+                    $value['percent'] = floatval(sprintf("%.2f",0));
+                }
+                $value['time'] = $time;
+
+                if (substr($value['symbol'], -4) == 'usdt') {
                     $usdt[] = $value;
                 } elseif (substr($value['symbol'], -3) == 'btc') {
-                    $sys = $value['close'] - $value['open'];
-                    $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
-                    $value['time'] = $time;
                     $btc[] = $value;
                 } elseif (substr($value['symbol'], -3) == 'eth') {
-                    $sys = $value['close'] - $value['open'];
-                    $value['percent'] = floatval(sprintf("%.2f",$sys/$value['open']*100));
-                    $value['time'] = $time;
                     $eth[] = $value;
                 } elseif (substr($value['symbol'],  -2) == 'ht') {
-                    $sys = $value['close'] - $value['open'];
-                    $value['percent'] = floatval(sprintf("%.2f", $sys / $value['open'] * 100));
-                    $value['time'] = $time;
                     $ht[] = $value;
                 }
             }
+            
             $percents = array_column($usdt,'percent');
             array_multisort($percents,SORT_DESC, $usdt);
             $output['usdt'] = $usdt;
