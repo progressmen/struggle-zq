@@ -70,7 +70,7 @@ class Market extends Base
                 $value['time'] = $time;
 
                 // 处理数据格式
-                $value['close'] = floatval(sprintf("%.6f",$value['close']));
+                $value['close'] = 123123;
                 $value['open']  = floatval(sprintf("%.6f",$value['open']));
                 $value['high']  = floatval(sprintf("%.6f",$value['high']));
                 $value['low']   = floatval(sprintf("%.6f",$value['low']));
