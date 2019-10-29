@@ -27,6 +27,11 @@ Route::get('balance', function (App\Btc\Account $account) {
     return $account->getBalance();
 });
 
+
+Route::get('actionOne', function (App\Btc\ActionOne $actionOne) {
+    return $actionOne->exec();
+});
+
 Route::any('mail/send','MailController@send');
 
 

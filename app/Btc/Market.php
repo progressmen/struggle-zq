@@ -95,7 +95,7 @@ class Market extends Base
             array_multisort($percents,SORT_DESC, $ht);
             $output['ht'] = $ht;
         }
-        echo json_encode($output);
+        return $output;
     }
 
 

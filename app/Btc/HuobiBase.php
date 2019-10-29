@@ -16,7 +16,9 @@ class HuobiBase extends Model
 
 
     public function __construct() {
+
         $this->api = parse_url($this->url)['host'];
+
         date_default_timezone_set("Etc/GMT+0");
 //        date_default_timezone_set("Asia/Shanghai");
         $this->accessKey = env('HUOBI_ACCESS_KEY');
@@ -24,9 +26,7 @@ class HuobiBase extends Model
 
     }
 
-    /**
-     * 类库方法
-     */
+
     // 生成验签URL
     public function create_sign_url($append_param = []) {
         // 验签参数
@@ -43,6 +43,7 @@ class HuobiBase extends Model
         }
         return $this->url.$this->api_method.'?'.$this->bind_param($param);
     }
+
     // 组合参数
     public function bind_param($param) {
         $u = [];
@@ -55,12 +56,15 @@ class HuobiBase extends Model
         $u[] = "Signature=".urlencode($this->create_sig($u));
         return implode('&', $u);
     }
+
     // 生成签名
     public function create_sig($param) {
         $sign_param_1 = $this->req_method."\n".$this->api."\n".$this->api_method."\n".implode('&', $param);
         $signature = hash_hmac('sha256', $sign_param_1, $this->secretKey, true);
         return base64_encode($signature);
     }
+
+    // 发送请求
     public function curl($url,$postdata=[]) {
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_URL, $url);
