@@ -68,6 +68,7 @@ class Trade
                 return false;
             }
         }
+        return true;
     }
 
     /**
