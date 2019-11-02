@@ -40,8 +40,7 @@ class Task
         $insertData = $this->makeData($data, $addData);
         $insertData['createTime'] = time();
 
-        $id = DB::table(self::TABLE_NAME)->insert($insertData);
-        return $id;
+        return DB::table(self::TABLE_NAME)->insertGetId($insertData);
     }
 
 

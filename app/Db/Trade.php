@@ -51,8 +51,7 @@ class Trade
         $insertData['createTime'] = time();
         $insertData['buyStartTime'] = time();
 
-        $id = DB::table(self::TABLE_NAME)->insert($insertData);
-        return $id;
+        return DB::table(self::TABLE_NAME)->insertGetId($insertData);
     }
 
 
