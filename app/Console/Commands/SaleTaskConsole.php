@@ -62,11 +62,14 @@ class SaleTaskConsole extends Command
             $marketObj = new Market();
             $huobiRes = $marketObj->trade(['symbol' => $tradeData[0]->symbol]);
             $huobiRes = json_decode($huobiRes, true);
-            var_dump($huobiRes);die;
 
             if ($huobiRes['status'] == 'ok') {
 
-                $huobiData = $huobiRes['data'];
+                $huobiData = !empty($huobiRes['tick']['data']) ? $huobiRes['tick']['data'] : $huobiRes['data'];
+                if(empty($huobiData)){
+                    echo date('YmdHis') . ' EMPTY HUOBI RESULT' . PHP_EOL;
+                    return false;
+                }
 
                 if ($huobiData[0]['price'] > $tradeData[0]->buyPrice * 1.03
                     || $huobiData[0]['price'] < $tradeData[0]->buyPrice * 0.97) {
