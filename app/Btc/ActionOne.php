@@ -41,7 +41,6 @@ class ActionOne extends Base
 
         foreach ($sortValue as $val) {
             $minuteData = $this->getTrendMinute($val['symbol']);
-            var_dump($minuteData);die;
 
             // 求平均值
             $closePrice = array_column($minuteData, 'close');
@@ -77,7 +76,9 @@ class ActionOne extends Base
         $inData['symbol'] = $symbol;
         $inData['period'] = '5min';
         $inData['size'] = 12;
-        return $this->marketObj->kline($inData);
+        $return = $this->marketObj->kline($inData);
+        $return = json_decode($return, true);
+        return $return['data'];
 
     }
 
