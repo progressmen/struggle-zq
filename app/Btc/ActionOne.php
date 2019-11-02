@@ -27,23 +27,47 @@ class ActionOne extends Base
         $usdtData = $tickerData['usdt'];
 
 
-
-        $newValue = [];
+        // 取出涨幅超过5%的数据
+        $sortValue = [];
         foreach ($usdtData as $value) {
-            if($value['percent'] > 5){
-                $newValue[] = $value;
+            if ($value['percent'] > 5) {
+                $sortValue[] = $value;
             }
         }
 
-        $vol = array_column($newValue,'vol');
-        array_multisort($vol,SORT_DESC,$newValue);
+        // 按交易量倒序排列
+        $vol = array_column($sortValue, 'vol');
+        array_multisort($vol, SORT_DESC, $sortValue);
 
-        echo json_encode($newValue);
-        exit();
+        foreach ($sortValue as $val) {
+            $minuteData = $this->getTrendMinute($val['symbol']);
 
-        $minuteData = $this->getTrendMinute($usdtData[0]['symbol']);
+            // 求平均值
+            $closePrice = array_count($minuteData, 'close');
+            $average = $this->getAverage($closePrice);
+
+            // 分为左右两个数组
+            $chunkArr = array_chunk($closePrice, 10);
+
+            // 判断是否为上升趋势
+            if ($this->getAverage($chunkArr[0]) < $average && $this->getAverage($chunkArr[1]) > $average) {
+                echo $val['symbol'];
+                echo "<br>";
+            }
+
+        }
 
 
+    }
+
+    /**
+     * 获取平均值
+     * @param $arr
+     * @return float
+     */
+    private function getAverage($arr)
+    {
+        return array_sum($arr) / count($arr);
     }
 
     // 分析近60分钟走势 20*5分
@@ -51,7 +75,7 @@ class ActionOne extends Base
     {
         $inData['symbol'] = $symbol;
         $inData['period'] = '5min';
-        $inData['size']   = 12;
+        $inData['size'] = 12;
         return $this->marketObj->kline($inData);
 
     }
@@ -62,7 +86,7 @@ class ActionOne extends Base
     {
         $inData['symbol'] = $symbol;
         $inData['period'] = '1day';
-        $inData['size']   = 7;
+        $inData['size'] = 7;
         return $this->marketObj->kline($inData);
     }
 
@@ -72,14 +96,9 @@ class ActionOne extends Base
     {
         $inData['symbol'] = $symbol;
         $inData['period'] = '1mon';
-        $inData['size']   = 6;
+        $inData['size'] = 6;
         return $this->marketObj->kline($inData);
     }
-
-
-
-
-
 
 
 }
