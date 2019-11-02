@@ -36,6 +36,10 @@ Route::get('trade', function (App\Db\Trade $trade) {
     return $trade->exec();
 });
 
+Route::get('getTrade', function (App\Db\Trade $trade) {
+    return $trade->getTrade();
+});
+
 
 Route::any('mail/send','MailController@send');
 
