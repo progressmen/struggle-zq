@@ -6,6 +6,13 @@ class ActionOne extends Base
 {
 
     private $marketObj;
+
+    private $arrType = array(
+        'type1', // 突然暴增
+        'type2', // 稳步提升
+        'type3', // 跌落之后提升
+    );
+
     public function __construct(array $attributes = [])
     {
         $this->marketObj = new Market();
@@ -19,23 +26,24 @@ class ActionOne extends Base
         $tickerData = $this->marketObj->tickers();
         $usdtData = $tickerData['usdt'];
 
-        /*foreach ($usdtData as $value) {
-            if($value['percent'] > 3){
-                echo json_encode($value);
+
+
+        $newValue = [];
+        foreach ($usdtData as $value) {
+            if($value['percent'] > 5){
+                $newValue[] = $value;
             }
-        }*/
+        }
+
+        $vol = array_column($newValue,'vol');
+        array_multisort($vol,SORT_DESC,$newValue);
+
+        echo json_encode($newValue);
+        exit();
 
         $minuteData = $this->getTrendMinute($usdtData[0]['symbol']);
-        $dayData = $this->getTrendDay($usdtData[0]['symbol']);
-        $mouthData = $this->getTrendMonth($usdtData[0]['symbol']);
 
-        echo json_encode($minuteData);
-        echo PHP_EOL;
-        echo json_encode($dayData);
-        echo PHP_EOL;
-        echo json_encode($mouthData);
-        echo PHP_EOL;
-        // 判断
+
     }
 
     // 分析近60分钟走势 20*5分

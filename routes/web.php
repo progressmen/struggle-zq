@@ -32,6 +32,11 @@ Route::get('actionOne', function (App\Btc\ActionOne $actionOne) {
     return $actionOne->exec();
 });
 
+Route::get('trade', function (App\Db\Trade $trade) {
+    return $trade->exec();
+});
+
+
 Route::any('mail/send','MailController@send');
 
 
