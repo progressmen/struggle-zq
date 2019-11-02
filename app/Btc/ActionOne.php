@@ -62,7 +62,7 @@ class ActionOne extends Base
         if(!empty($qualityData)){
             $this->tradeObj->insertTrade([
                 'symbol' => $qualityData[0]['symbol'],
-                'close' => $qualityData[0]['close'],
+                'buyPrice' => $qualityData[0]['close'],
             ]);
         }
 
