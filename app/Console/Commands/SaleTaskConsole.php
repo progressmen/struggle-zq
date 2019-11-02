@@ -62,6 +62,7 @@ class SaleTaskConsole extends Command
             $marketObj = new Market();
             $huobiRes = $marketObj->trade(['symbol' => $tradeData[0]->symbol]);
             $huobiRes = json_decode($huobiRes, true);
+            var_dump($huobiRes);die;
 
             if ($huobiRes['status'] == 'ok') {
 
