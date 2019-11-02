@@ -69,7 +69,7 @@ class ActionOne extends Base
 
 
             // 开启事务
-            DB::transaction(function ($qualityData) {
+            DB::transaction(function () use ($qualityData) {
                 // 插入交易记录
                 $id = $this->tradeObj->insertTrade([
                     'symbol' => $qualityData[0]['symbol'],
