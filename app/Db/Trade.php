@@ -2,7 +2,6 @@
 
 namespace App\Db;
 use Illuminate\support\Facades\DB;
-use mysql_xdevapi\Exception;
 
 
 class Trade
@@ -16,8 +15,10 @@ class Trade
 
     function exec()
     {
-        $data = DB::table('b_trade')->get();
-        var_dump($data);
+        $this->insertTrade([
+            'symbol' => 'asasdf',
+            'buyPrice' => 111.00,
+        ]);
     }
 
 
@@ -51,7 +52,7 @@ class Trade
     {
         foreach ($addData as $val){
             if(!array_key_exists($val,$data)){
-                throw new Exception('参数错误');
+                throw new \Exception('参数错误',0);
             }
         }
     }
