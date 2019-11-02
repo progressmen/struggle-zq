@@ -29,6 +29,13 @@ class ActionOne extends Base
      */
     public function exec()
     {
+
+        // 检查当前有没有已购买的币
+        $saleData = $this->tradeObj->getTrade(['saleStatus'=>0]);
+        var_dump(empty($saleData));
+        var_dump($saleData);die;
+
+
         // 获取当前涨幅排名
         $tickerData = $this->marketObj->tickers();
         $usdtData = $tickerData['usdt'];
@@ -62,6 +69,7 @@ class ActionOne extends Base
                 $qualityData[] = $val;
             }
         }
+
 
         if(!empty($qualityData)){
 

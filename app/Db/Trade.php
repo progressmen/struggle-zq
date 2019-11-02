@@ -9,26 +9,10 @@ class Trade
     const TABLE_NAME = 'b_trade';
 
 
-    public function __construct(array $attributes = [])
+
+    function getTrade($where)
     {
-
-    }
-
-
-
-    function exec()
-    {
-        $this->insertTrade([
-            'symbol' => 'asasdf',
-            'buyPrice' => 111.00,
-        ]);
-    }
-
-
-    function getTrade()
-    {
-        $data = DB::table(self::TABLE_NAME)->get();
-        var_dump($data);
+        return DB::table(self::TABLE_NAME)->where($where)->get();
     }
 
     /**
