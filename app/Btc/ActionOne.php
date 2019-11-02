@@ -43,7 +43,7 @@ class ActionOne extends Base
             $minuteData = $this->getTrendMinute($val['symbol']);
 
             // 求平均值
-            $closePrice = array_count($minuteData, 'close');
+            $closePrice = array_column($minuteData, 'close');
             $average = $this->getAverage($closePrice);
 
             // 分为左右两个数组
