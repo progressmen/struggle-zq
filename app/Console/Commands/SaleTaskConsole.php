@@ -101,6 +101,8 @@ class SaleTaskConsole extends Command
                         echo date('YmdHis') . ' SUCCESS TRADE' . PHP_EOL;
                         DB::commit();
                     }
+                } else {
+                    echo date('YmdHis') . ' NO NEED HANDEL' . PHP_EOL;
                 }
             }
         }
