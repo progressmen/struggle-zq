@@ -12,7 +12,7 @@ class Trade
 
     function getTrade($where)
     {
-        return DB::table(self::TABLE_NAME)->where($where)->get();
+        return DB::table(self::TABLE_NAME)->where($where)->get()->toArray();
     }
 
     /**
