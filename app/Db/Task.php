@@ -4,43 +4,33 @@ namespace App\Db;
 use Illuminate\Support\Facades\DB;
 
 
-class Trade
+class Task
 {
-    const TABLE_NAME = 'b_trade';
+    const TABLE_NAME = 'b_task';
 
 
-    public function __construct(array $attributes = [])
+
+    /**
+     * @param $where
+     * @return \Illuminate\Support\Collection
+     */
+    function getTask($where)
     {
-
+        return DB::table(self::TABLE_NAME)->select('*')->where($where)->get();
     }
 
 
-
-    function exec()
-    {
-        $this->insertTrade([
-            'symbol' => 'asasdf',
-            'buyPrice' => 111.00,
-        ]);
-    }
-
-
-    function getTrade()
-    {
-        $data = DB::table(self::TABLE_NAME)->get();
-        var_dump($data);
-    }
 
     /**
      * 插入交易记录表
      * @param $data
      * @return bool
      */
-    function insertTrade($data)
+    function insertTask($data)
     {
         $addData = [
-            'symbol',
-            'buyPrice',
+            'tradeId',
+            'type',
         ];
 
         if(!$this->checkEmpty($data, $addData)){
@@ -49,11 +39,11 @@ class Trade
 
         $insertData = $this->makeData($data, $addData);
         $insertData['createTime'] = time();
-        $insertData['buyStartTime'] = time();
 
         $id = DB::table(self::TABLE_NAME)->insert($insertData);
         return $id;
     }
+
 
 
     /**

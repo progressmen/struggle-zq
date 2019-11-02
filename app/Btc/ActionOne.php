@@ -2,7 +2,9 @@
 
 namespace App\Btc;
 
+use App\Db\Task;
 use App\Db\Trade;
+use Illuminate\Support\Facades\DB;
 
 class ActionOne extends Base
 {
@@ -10,12 +12,14 @@ class ActionOne extends Base
 
     private $marketObj;
     private $tradeObj;
+    private $taskObj;
 
 
     public function __construct(array $attributes = [])
     {
         $this->marketObj = new Market();
-        $this->tradeObj = new Trade();
+        $this->tradeObj  = new Trade();
+        $this->taskObj   = new Task();
         parent::__construct($attributes);
     }
 
@@ -60,10 +64,26 @@ class ActionOne extends Base
         }
 
         if(!empty($qualityData)){
-            $this->tradeObj->insertTrade([
-                'symbol' => $qualityData[0]['symbol'],
-                'buyPrice' => $qualityData[0]['close'],
-            ]);
+
+            // 请求交易接口
+
+
+            // 开启事务
+            DB::transaction(function ($qualityData) {
+                // 插入交易记录
+                $id = $this->tradeObj->insertTrade([
+                    'symbol' => $qualityData[0]['symbol'],
+                    'buyPrice' => $qualityData[0]['close'],
+                ]);
+
+                // 插入任务表
+                $this->taskObj->insertTask([
+                    'tradeId' => $id,
+                    'type'  => 1,
+                ]);
+            });
+
+            echo 'success';
         }
 
     }
