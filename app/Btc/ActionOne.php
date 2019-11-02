@@ -38,6 +38,7 @@ class ActionOne extends Base
         // 按交易量倒序排列
         $vol = array_column($sortValue, 'vol');
         array_multisort($vol, SORT_DESC, $sortValue);
+        var_dump($sortValue);
 
         foreach ($sortValue as $val) {
             $minuteData = $this->getTrendMinute($val['symbol']);
