@@ -69,19 +69,27 @@ class ActionOne extends Base
 
 
             // 开启事务
-            DB::transaction(function () use ($qualityData) {
-                // 插入交易记录
-                $id = $this->tradeObj->insertTrade([
-                    'symbol' => $qualityData[0]['symbol'],
-                    'buyPrice' => $qualityData[0]['close'],
-                ]);
+            DB::beginTransaction();
 
-                // 插入任务表
-                $this->taskObj->insertTask([
-                    'tradeId' => $id,
-                    'type'  => 1,
-                ]);
-            });
+            // 插入交易记录
+            $tradeRes = $this->tradeObj->insertTrade([
+                'symbol' => $qualityData[0]['symbol'],
+                'buyPrice' => $qualityData[0]['close'],
+            ]);
+            var_dump($tradeRes);
+
+            // 插入任务表
+            $taskRes = $this->taskObj->insertTask([
+                'tradeId' => $tradeRes,
+                'type'  => 1,
+            ]);
+            var_dump($taskRes);
+
+            if($tradeRes === false || $taskRes === false){
+                DB::rollBack();
+            }else{
+                DB::commit();
+            }
 
             echo 'success';
         }
