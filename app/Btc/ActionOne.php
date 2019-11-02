@@ -41,6 +41,7 @@ class ActionOne extends Base
 
         foreach ($sortValue as $val) {
             $minuteData = $this->getTrendMinute($val['symbol']);
+            var_dump($minuteData);die;
 
             // 求平均值
             $closePrice = array_column($minuteData, 'close');
