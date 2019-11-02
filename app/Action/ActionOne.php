@@ -2,6 +2,7 @@
 
 namespace App\Action;
 
+use App\Btc\Market;
 use App\Db\Task;
 use App\Db\Trade;
 use Illuminate\Support\Facades\DB;
