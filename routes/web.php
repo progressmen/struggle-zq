@@ -28,7 +28,7 @@ Route::get('balance', function (App\Btc\Account $account) {
 });
 
 
-Route::get('actionOne', function (App\Btc\ActionOne $actionOne) {
+Route::get('actionOne', function (App\Action\ActionOne $actionOne) {
     return $actionOne->exec();
 });
 

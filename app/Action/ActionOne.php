@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Btc;
+namespace App\Action;
 
 use App\Db\Task;
 use App\Db\Trade;
 use Illuminate\Support\Facades\DB;
 
-class ActionOne extends Base
+class ActionOne
 {
 
 
@@ -15,12 +15,11 @@ class ActionOne extends Base
     private $taskObj;
 
 
-    public function __construct(array $attributes = [])
+    public function __construct()
     {
         $this->marketObj = new Market();
-        $this->tradeObj  = new Trade();
-        $this->taskObj   = new Task();
-        parent::__construct($attributes);
+        $this->tradeObj = new Trade();
+        $this->taskObj = new Task();
     }
 
 
@@ -31,10 +30,10 @@ class ActionOne extends Base
     {
 
         // 检查当前有没有已购买的币
-        $saleData = $this->tradeObj->getTrade(['saleStatus'=>0]);
-        var_dump(empty($saleData));
-        var_dump($saleData);die;
-
+        $saleData = $this->tradeObj->getTrade(['saleStatus' => 0]);
+        if (!empty($saleData)) {
+            return false;
+        }
 
         // 获取当前涨幅排名
         $tickerData = $this->marketObj->tickers();
@@ -56,6 +55,9 @@ class ActionOne extends Base
         $qualityData = [];
         foreach ($sortValue as $val) {
             $minuteData = $this->getTrendMinute($val['symbol']);
+            if (empty($minuteData)) {
+                continue;
+            }
 
             // 求平均值
             $closePrice = array_column($minuteData, 'close');
@@ -71,33 +73,29 @@ class ActionOne extends Base
         }
 
 
-        if(!empty($qualityData)){
+        if (!empty($qualityData)) {
 
             // 请求交易接口
 
 
             // 开启事务
             DB::beginTransaction();
-            var_dump($qualityData[0]['symbol']);
-            var_dump($qualityData[0]['close']);
 
             // 插入交易记录
             $tradeRes = $this->tradeObj->insertTrade([
                 'symbol' => $qualityData[0]['symbol'],
                 'buyPrice' => $qualityData[0]['close'],
             ]);
-            var_dump($tradeRes);
 
             // 插入任务表
             $taskRes = $this->taskObj->insertTask([
                 'tradeId' => $tradeRes,
-                'type'  => 1,
+                'type' => 1,
             ]);
-            var_dump($taskRes);
 
-            if($tradeRes === false || $taskRes === false){
+            if ($tradeRes === false || $taskRes === false) {
                 DB::rollBack();
-            }else{
+            } else {
                 DB::commit();
             }
 
@@ -132,10 +130,6 @@ class ActionOne extends Base
         return $return['data'];
 
     }
-
-
-
-
 
 
 }

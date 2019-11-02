@@ -43,6 +43,17 @@ class Trade
         return DB::table(self::TABLE_NAME)->insertGetId($insertData);
     }
 
+    /**
+     * 更新数据库
+     * @param $where
+     * @param $updateData
+     * @return int
+     */
+    function updateTrade($where, $updateData)
+    {
+        return DB::table(self::TABLE_NAME)->where($where)->update($updateData);
+    }
+
 
     /**
      * @param $data
