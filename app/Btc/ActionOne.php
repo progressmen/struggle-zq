@@ -70,6 +70,7 @@ class ActionOne extends Base
 
             // 开启事务
             DB::beginTransaction();
+            var_dump($qualityData);
 
             // 插入交易记录
             $tradeRes = $this->tradeObj->insertTrade([
