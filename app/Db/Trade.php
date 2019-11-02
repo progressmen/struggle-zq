@@ -28,6 +28,7 @@ class Trade
     function insertTrade($data)
     {
         $addData = [
+            'amount',
             'symbol',
             'buyPrice',
         ];

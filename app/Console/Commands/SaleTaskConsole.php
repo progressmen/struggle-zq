@@ -45,7 +45,7 @@ class SaleTaskConsole extends Command
         $taskObj = new Task();
         $tradeObj = new Trade();
         $mailObj = new CommonMail();
-        $tradeData = $tradeObj->getTrade(['saleStatus' => 0]);
+        $tradeData = $tradeObj->getTrade(['saleStatus' => 0, 'buyStatus' => 1]);
 
         if (count($tradeData) > 1) {
             $mailObj->warnMail('存在两笔或更多正在进行的任务');
@@ -60,43 +60,44 @@ class SaleTaskConsole extends Command
 
             // 查询币种价格
             $marketObj = new Market();
-            var_dump($tradeData[0]->symbol);
             $huobiRes = $marketObj->trade(['symbol' => $tradeData[0]->symbol]);
-            var_dump($huobiRes);
-//            echo $huobiRes;
-//            echo PHP_EOL;
-//            $huobiRes = json_decode($huobiRes, true);
-//            if($huobiRes['status' == 'ok']){
-//                $huobiData = $huobiRes['data'];
-//            }
-            exit;
+            $huobiRes = json_decode($huobiRes, true);
 
+            if ($huobiRes['status' == 'ok']) {
 
+                $huobiData = $huobiRes['data'];
 
+                if ($huobiData[0]['price'] > $tradeData[0]->buyPrice * 1.03
+                    || $huobiData[0]['price'] < $tradeData[0]->buyPrice * 0.97) {
 
-            // 修改数据表状态
-            // 开启事务
-            DB::beginTransaction();
+                    // 创建卖单
 
-            // 更新任务表
-            $taskRes = $taskObj->updateTask(['id' => $taskData[0]['id']], ['status' => 1]);
+                    // 开启事务
+                    DB::beginTransaction();
 
-            if ($taskData[0]['type'] == 1) { // 买入
-                $tradeUpdateData = ['buyStatus' => 1, 'buyEndTime' => time()];
-            } else { // 卖出
-                $tradeUpdateData = ['saleStatus' => 1, 'saleEndTime' => time()];
-            }
-            $tradeRes = $tradeObj->updateTrade(['id' => $taskData[0]['tradeId']],$tradeUpdateData);
+                    $taskRes = $taskObj->insertTask([
+                        'tradeId' => $tradeData[0]->id,
+                        'type' => 2,  // 卖出
+                    ]);
 
-            if ($tradeRes === false || $taskRes === false) {
-                echo date('YmdHis') . ' DB ERROR TASK' . PHP_EOL;
-                DB::rollBack();
-            } else {
-                $message = $taskData[0]['type'] == 1 ? '买入' : '卖出';
-                $message = '交易id:' . $taskData[0]['tradeId'] . $message . '成功' . ' symbol:' . $tradeData[0]['symbol'];
-                $mailObj->normalMail($message);
-                echo date('YmdHis') . ' SUCCESS TASK' . PHP_EOL;
-                DB::commit();
+                    $tradeUpdateData = [
+                        'salePrice' => $huobiData[0]['price'],
+                        'saleStartTime' => time()
+                    ];
+                    $tradeRes = $tradeObj->updateTrade(['id' => $tradeData[0]->id], $tradeUpdateData);
+
+                    if ($tradeRes === false || $taskRes === false) {
+                        echo date('YmdHis') . ' DB ERROR TRADE' . PHP_EOL;
+                        DB::rollBack();
+                    } else {
+                        $message = '交易id:' . $tradeData[0]->id .' 创建卖单成功' . ' symbol:' . $tradeData[0]->symbol;
+                        $money = ($huobiData[0]['price'] - $tradeData[0]->buyPrice) * $tradeData[0]->amount;
+                        $message .= ' 预计收益:' . $money;
+                        $mailObj->normalMail($message);
+                        echo date('YmdHis') . ' SUCCESS TRADE' . PHP_EOL;
+                        DB::commit();
+                    }
+                }
             }
         }
     }

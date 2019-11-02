@@ -60,30 +60,29 @@ class TaskConsole extends Command
             // 查询交易结果
 
 
-
             // 查询交易数据
-            $tradeData = $tradeObj->getTrade(['id' => $taskData[0]['tradeId']]);
+            $tradeData = $tradeObj->getTrade(['id' => $taskData[0]->tradeId]);
 
             // 修改数据表状态
             // 开启事务
             DB::beginTransaction();
 
             // 更新任务表
-            $taskRes = $taskObj->updateTask(['id' => $taskData[0]['id']], ['status' => 1]);
+            $taskRes = $taskObj->updateTask(['id' => $taskData[0]->id], ['status' => 1]);
 
-            if ($taskData[0]['type'] == 1) { // 买入
+            if ($taskData[0]->type == 1) { // 买入
                 $tradeUpdateData = ['buyStatus' => 1, 'buyEndTime' => time()];
             } else { // 卖出
                 $tradeUpdateData = ['saleStatus' => 1, 'saleEndTime' => time()];
             }
-            $tradeRes = $tradeObj->updateTrade(['id' => $taskData[0]['tradeId']],$tradeUpdateData);
+            $tradeRes = $tradeObj->updateTrade(['id' => $taskData[0]->tradeId], $tradeUpdateData);
 
             if ($tradeRes === false || $taskRes === false) {
                 echo date('YmdHis') . ' DB ERROR TASK' . PHP_EOL;
                 DB::rollBack();
             } else {
-                $message = $taskData[0]['type'] == 1 ? '买入' : '卖出';
-                $message = '交易id:' . $taskData[0]['tradeId'] . $message . '成功' . ' symbol:' . $tradeData[0]['symbol'];
+                $message = $taskData[0]->type == 1 ? '买入' : '卖出';
+                $message = '交易id:' . $taskData[0]->tradeId . $message . '成功' . ' symbol:' . $tradeData[0]->symbol;
                 $mailObj->normalMail($message);
                 echo date('YmdHis') . ' SUCCESS TASK' . PHP_EOL;
                 DB::commit();

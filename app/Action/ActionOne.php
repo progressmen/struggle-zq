@@ -83,6 +83,7 @@ class ActionOne
 
             // 插入交易记录
             $tradeRes = $this->tradeObj->insertTrade([
+                'amount' => 100,
                 'symbol' => $qualityData[0]['symbol'],
                 'buyPrice' => $qualityData[0]['close'],
             ]);

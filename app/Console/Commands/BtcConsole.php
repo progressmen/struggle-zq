@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Action\ActionOne;
 use App\Btc;
 use Illuminate\Console\Command;
 
@@ -39,12 +40,9 @@ class BtcConsole extends Command
     public function handle()
     {
         $command = $this->argument('cmd');
-        $btcObj = new Btc\Account();
-        if (empty($command)) {
-            $btcObj->get_account_accounts();
-        } else {
-            $btcObj->$command();
+        if($command == 'one'){
+            $oneObj = new ActionOne();
+            $oneObj->exec();
         }
-
     }
 }
