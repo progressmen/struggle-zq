@@ -60,9 +60,11 @@ class SaleTaskConsole extends Command
 
             // 查询币种价格
             $marketObj = new Market();
+            var_dump($tradeData);
             $huobiRes = $marketObj->trade(['symbol' => $tradeData[0]['symbol']]);
-            echo $huobiRes;
-            echo PHP_EOL;
+            var_dump($huobiRes);
+//            echo $huobiRes;
+//            echo PHP_EOL;
             $huobiRes = json_decode($huobiRes, true);
             if($huobiRes['status' == 'ok']){
                 $huobiData = $huobiRes['data'];

@@ -139,7 +139,7 @@ class Market extends Base
         $params['sign'] = $sign;
         $url = $this->buildUrl($path);
         $result = self::sendCurl($url, $params);
-        echo $result;
+        return $result;
     }
 
 
@@ -155,7 +155,7 @@ class Market extends Base
         $params['sign'] = $sign;
         $url = $this->buildUrl($path);
         $result = self::sendCurl($url, $params);
-        echo $result;
+        return $result;
     }
 
 
