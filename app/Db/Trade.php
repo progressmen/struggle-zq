@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Db;
-use Illuminate\support\Facades\DB;
+use Illuminate\Support\Facades\DB;
 
 
 class Trade
