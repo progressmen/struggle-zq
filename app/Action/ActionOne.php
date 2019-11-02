@@ -33,6 +33,7 @@ class ActionOne
         // 检查当前有没有已购买的币
         $saleData = $this->tradeObj->getTrade(['saleStatus' => 0]);
         if (!empty($saleData)) {
+            echo date('Y-m-d H:i:s') . 'ON TRADE';
             return false;
         }
 
@@ -59,6 +60,7 @@ class ActionOne
             if (empty($minuteData)) {
                 continue;
             }
+            echo '$minuteData:' . json_encode($minuteData);
 
             // 求平均值
             $closePrice = array_column($minuteData, 'close');
@@ -101,7 +103,7 @@ class ActionOne
                 DB::commit();
             }
 
-            echo 'success';
+            echo date('Y-m-d H:i:s') . $qualityData[0]['symbol'] . ' SUCCESS';
         }
 
     }
