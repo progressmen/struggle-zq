@@ -21,12 +21,13 @@ class CommonMail
     /**
      * Build the message.
      *
+     * @param $msg
      * @return $this
      */
-    public function build($msg)
+    public function normalMail($msg)
     {
 
-        $subject = '邮件名称';
+        $subject = 'struggle';
         $to = self::TO_MAIL;
         Mail::send(
             'emails.normal',
@@ -45,7 +46,7 @@ class CommonMail
         $subject = '异常警报';
         $to = self::TO_MAIL;
         Mail::send(
-            'emails.normal',
+            'emails.warn',
             ['msg' => $msg],
             function ($message) use($to, $subject) {
                 $message->to($to)->subject($subject);

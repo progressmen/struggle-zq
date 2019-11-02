@@ -47,12 +47,12 @@ class TaskConsole extends Command
 
         if (count($taskData) > 1) {
             $mailObj->warnMail('存在两笔或更多正在进行的任务');
-            echo date('YMDHis') . ' ERROR TASK' . PHP_EOL;
+            echo date('YmdHis') . ' ERROR TASK' . PHP_EOL;
             return false;
         }
 
         if (empty($taskData)) {
-            echo date('YMDHis') . ' EMPTY TASK' . PHP_EOL;
+            echo date('YmdHis') . ' EMPTY TASK' . PHP_EOL;
         } else {
             // 查询交易结果
 
@@ -72,13 +72,13 @@ class TaskConsole extends Command
             $tradeRes = $tradeObj->updateTrade(['id' => $taskData[0]['tradeId']],$tradeUpdateData);
 
             if ($tradeRes === false || $taskRes === false) {
-                echo date('YMDHis') . ' DB ERROR TASK' . PHP_EOL;
+                echo date('YmdHis') . ' DB ERROR TASK' . PHP_EOL;
                 DB::rollBack();
             } else {
                 $message = $taskData[0]['type'] == 1 ? '买入' : '卖出';
                 $message = '交易id:' . $taskData[0]['tradeId'] . $message . '成功';
-                $mailObj->warnMail($message);
-                echo date('YMDHis') . ' SUCCESS TASK' . PHP_EOL;
+                $mailObj->normalMail($message);
+                echo date('YmdHis') . ' SUCCESS TASK' . PHP_EOL;
                 DB::commit();
             }
         }
