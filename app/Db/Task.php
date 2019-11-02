@@ -12,11 +12,12 @@ class Task
 
     /**
      * @param $where
-     * @return \Illuminate\Support\Collection
+     * @param $field
+     * @return array
      */
-    function getTask($where)
+    function getTask($where, $field = '*')
     {
-        return DB::table(self::TABLE_NAME)->select('*')->where($where)->get();
+        return DB::table(self::TABLE_NAME)->select($field)->where($where)->get()->toArray();
     }
 
 

@@ -10,9 +10,14 @@ class Trade
 
 
 
-    function getTrade($where)
+    /**
+     * @param $where
+     * @param string $field
+     * @return array
+     */
+    function getTrade($where, $field = '*')
     {
-        return DB::table(self::TABLE_NAME)->where($where)->get()->toArray();
+        return DB::table(self::TABLE_NAME)->select($field)->where($where)->get()->toArray();
     }
 
     /**
