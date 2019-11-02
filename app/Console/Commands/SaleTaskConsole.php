@@ -2,20 +2,21 @@
 
 namespace App\Console\Commands;
 
+use App\Btc\Market;
 use App\Db\Task;
 use App\Db\Trade;
 use App\Mail\CommonMail;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class TaskConsole extends Command
+class SaleTaskConsole extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'task';
+    protected $signature = 'sale_task';
 
     /**
      * The console command description.
@@ -44,25 +45,32 @@ class TaskConsole extends Command
         $taskObj = new Task();
         $tradeObj = new Trade();
         $mailObj = new CommonMail();
-        $taskData = $taskObj->getTask(['status' => 0]);
+        $tradeData = $tradeObj->getTrade(['saleStatus' => 0]);
 
-
-        if (count($taskData) > 1) {
+        if (count($tradeData) > 1) {
             $mailObj->warnMail('存在两笔或更多正在进行的任务');
-            echo date('YmdHis') . ' ERROR TASK' . PHP_EOL;
+            echo date('YmdHis') . ' ERROR TRADE' . PHP_EOL;
             return false;
         }
 
-        if (empty($taskData)) {
-            echo date('YmdHis') . ' EMPTY TASK' . PHP_EOL;
+
+        if (empty($tradeData)) {
+            echo date('YmdHis') . ' EMPTY TRADE' . PHP_EOL;
         } else {
 
-            // 查询交易结果
+            // 查询币种价格
+            $marketObj = new Market();
+            $huobiRes = $marketObj->trade(['symbol' => $tradeData[0]['symbol']]);
+            echo $huobiRes;
+            echo PHP_EOL;
+            $huobiRes = json_decode($huobiRes, true);
+            if($huobiRes['status' == 'ok']){
+                $huobiData = $huobiRes['data'];
+            }
+            exit;
 
 
 
-            // 查询交易数据
-            $tradeData = $tradeObj->getTrade(['id' => $taskData[0]['tradeId']]);
 
             // 修改数据表状态
             // 开启事务
