@@ -67,6 +67,7 @@ class TodayConsole extends Command
         $message .= '交易对:' . $symbolStr .PHP_EOL;
         $message .= '总收益:' . $sum .PHP_EOL;
         $mailObj->normalMail($message);
+        echo date('YmdHis') . ' TODAY SUCCESS' . PHP_EOL;
 
     }
 }
