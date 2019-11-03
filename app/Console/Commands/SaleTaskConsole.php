@@ -59,8 +59,8 @@ class SaleTaskConsole extends Command
         } else {
 
             // 判断卖单是否存在
-            $taskObj->getTask(['tradeId' => $tradeData[0]->id,'type'=>2]);
-            if(!empty($taskObj)){
+            $taskData = $taskObj->getTask(['tradeId' => $tradeData[0]->id,'type'=>2]);
+            if(!empty($taskData)){
                 echo date('YmdHis') . ' EXIST TASK' . PHP_EOL;
                 return false;
             }
