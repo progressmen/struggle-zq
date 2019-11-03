@@ -58,6 +58,13 @@ class SaleTaskConsole extends Command
             echo date('YmdHis') . ' EMPTY TRADE' . PHP_EOL;
         } else {
 
+            // 判断卖单是否存在
+            $taskObj->getTask(['tradeId' => $tradeData[0]->id,'type'=>2]);
+            if(!empty($taskObj)){
+                echo date('YmdHis') . ' EXIST TASK' . PHP_EOL;
+                return false;
+            }
+
             // 查询币种价格
             $marketObj = new Market();
             $huobiRes = $marketObj->trade(['symbol' => $tradeData[0]->symbol]);

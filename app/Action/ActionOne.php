@@ -5,6 +5,7 @@ namespace App\Action;
 use App\Btc\Market;
 use App\Db\Task;
 use App\Db\Trade;
+use App\Mail\CommonMail;
 use Illuminate\Support\Facades\DB;
 
 class ActionOne
@@ -33,7 +34,7 @@ class ActionOne
         // 检查当前有没有已购买的币
         $saleData = $this->tradeObj->getTrade(['saleStatus' => 0]);
         if (!empty($saleData)) {
-            echo date('Y-m-d H:i:s') . 'ON TRADE';
+            echo date('Y-m-d H:i:s') . 'ON TRADE' . PHP_EOL;
             return false;
         }
 
@@ -60,7 +61,7 @@ class ActionOne
             if (empty($minuteData)) {
                 continue;
             }
-            echo '$minuteData:' . json_encode($minuteData);
+            echo '$minuteData:' . json_encode($minuteData) . PHP_EOL;
 
             // 求平均值
             $closePrice = array_column($minuteData, 'close');
@@ -101,9 +102,11 @@ class ActionOne
                 DB::rollBack();
             } else {
                 DB::commit();
+                $mailObj = new CommonMail();
+                $mailObj->normalMail('买单ID：'.$tradeRes.' 创建买单成功 symbol:' . $qualityData[0]['symbol']);
             }
 
-            echo date('Y-m-d H:i:s') . $qualityData[0]['symbol'] . ' SUCCESS';
+            echo date('Y-m-d H:i:s') . $qualityData[0]['symbol'] . ' SUCCESS' . PHP_EOL;
         }
 
     }
