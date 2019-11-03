@@ -85,9 +85,11 @@ class ActionOne
             // 开启事务
             DB::beginTransaction();
 
+            $money = 460;
+            $amount = floatval($money/ $qualityData[0]['close']);
             // 插入交易记录
             $tradeRes = $this->tradeObj->insertTrade([
-                'amount' => 100,
+                'amount' => $amount,
                 'symbol' => $qualityData[0]['symbol'],
                 'buyPrice' => $qualityData[0]['close'],
             ]);
