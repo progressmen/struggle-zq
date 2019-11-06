@@ -55,27 +55,11 @@ class ActionOne
         $vol = array_column($sortValue, 'vol');
         array_multisort($vol, SORT_DESC, $sortValue);
 
-        $qualityData = [];
-        foreach ($sortValue as $val) {
-            $minuteData = $this->getTrendMinute($val['symbol']);
-            if (empty($minuteData)) {
-                continue;
-            }
-            echo '$minuteData:' . json_encode($minuteData) . PHP_EOL;
+        // 5分钟维度60分钟呈上升趋势
+        $fiveQualityData = $this->getFiveMinuteQualityData($sortValue);
 
-            // 求平均值
-            $closePrice = array_column($minuteData, 'close');
-            $average = $this->getAverage($closePrice);
-
-            // 分为左右两个数组
-            $chunkArr = array_chunk($closePrice, 10);
-
-            // 判断是否为上升趋势
-            if ($this->getAverage($chunkArr[0]) < $average && $this->getAverage($chunkArr[1]) > $average) {
-                $qualityData[] = $val;
-            }
-        }
-
+        // 1分钟维度10分钟呈上升趋势
+        $qualityData = $this->getOneMinuteQualityData($fiveQualityData);
 
         if (!empty($qualityData)) {
 
@@ -114,6 +98,67 @@ class ActionOne
     }
 
     /**
+     * 获取五分钟维度优质数据
+     * @param $sortValue
+     * @return array
+     */
+    public function getFiveMinuteQualityData($sortValue)
+    {
+        $qualityData = [];
+        foreach ($sortValue as $val) {
+            $minuteData = $this->getTrendFiveMinute($val['symbol']);
+            if (empty($minuteData)) {
+                continue;
+            }
+            echo 'getTrendFiveMinute:' . json_encode($minuteData) . PHP_EOL;
+
+            // 求平均值
+            $closePrice = array_column($minuteData, 'close');
+            $average = $this->getAverage($closePrice);
+
+            // 分为左右两个数组
+            $chunkArr = array_chunk($closePrice, 6);
+
+            // 判断是否为上升趋势
+            if ($this->getAverage($chunkArr[0]) < $average && $this->getAverage($chunkArr[1]) > $average) {
+                $qualityData[] = $val;
+            }
+        }
+        return $qualityData;
+    }
+
+    /**
+     * 获取一分钟维度优质数据
+     * @param $sortValue
+     * @return array
+     */
+    public function getOneMinuteQualityData($sortValue)
+    {
+        $qualityData = [];
+        foreach ($sortValue as $val) {
+            $minuteData = $this->getTrendOneMinute($val['symbol']);
+            if (empty($minuteData)) {
+                continue;
+            }
+            echo 'getTrendOneMinute:' . json_encode($minuteData) . PHP_EOL;
+
+            // 求平均值
+            $closePrice = array_column($minuteData, 'close');
+            $average = $this->getAverage($closePrice);
+
+            // 分为左右两个数组
+            $chunkArr = array_chunk($closePrice, 5);
+
+            // 判断是否为上升趋势
+            if ($this->getAverage($chunkArr[0]) < $average && $this->getAverage($chunkArr[1]) > $average) {
+                $qualityData[] = $val;
+            }
+        }
+        return $qualityData;
+    }
+
+
+    /**
      * 获取平均值
      * @param $arr
      * @return float
@@ -124,16 +169,34 @@ class ActionOne
     }
 
 
+
     /**
      * 分析近60分钟走势 20*5分
      * @param $symbol
      * @return mixed
      */
-    public function getTrendMinute($symbol)
+    public function getTrendFiveMinute($symbol)
     {
         $inData['symbol'] = $symbol;
         $inData['period'] = '5min';
         $inData['size'] = 12;
+        $return = $this->marketObj->kline($inData);
+        $return = json_decode($return, true);
+        return $return['data'];
+
+    }
+
+
+    /**
+     * 分析近60分钟走势 20*5分
+     * @param $symbol
+     * @return mixed
+     */
+    public function getTrendOneMinute($symbol)
+    {
+        $inData['symbol'] = $symbol;
+        $inData['period'] = '1min';
+        $inData['size'] = 10;
         $return = $this->marketObj->kline($inData);
         $return = json_decode($return, true);
         return $return['data'];
