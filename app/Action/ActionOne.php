@@ -140,7 +140,7 @@ class ActionOne
             if (empty($minuteData)) {
                 continue;
             }
-            echo 'getTrendOneMinute:' . json_encode($minuteData) . PHP_EOL;
+//            echo 'getTrendOneMinute:' . json_encode($minuteData) . PHP_EOL;
 
             // 求平均值
             $closePrice = array_column($minuteData, 'close');
@@ -148,6 +148,7 @@ class ActionOne
 
             // 分为左右两个数组
             $chunkArr = array_chunk($closePrice, 5);
+
 
             // 判断是否为上升趋势
             if ($this->getAverage($chunkArr[0]) < $average && $this->getAverage($chunkArr[1]) > $average) {
