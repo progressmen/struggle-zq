@@ -52,7 +52,6 @@ class TodayConsole extends Command
             ['saleStatus', '=', 1]
         );
         $tradeData = $tradeObj->getTrade($where);
-        var_dump($tradeData);die;
         $sum = 0;
         foreach ($tradeData as $value) {
             $sum += ($value->salePrice - $value->buyPrice) * $value->amount;
@@ -68,7 +67,6 @@ class TodayConsole extends Command
         $message .= '交易对:' . $symbolStr .PHP_EOL;
         $message .= '总收益:' . $sum .PHP_EOL;
         $mailObj->normalMail($message);
-        var_dump($message);die;
         echo date('YmdHis') . ' TODAY SUCCESS' . PHP_EOL;
 
     }
