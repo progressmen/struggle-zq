@@ -52,6 +52,7 @@ class TodayConsole extends Command
             ['saleStatus', '=', 1]
         );
         $tradeData = $tradeObj->getTrade($where);
+        var_dump($tradeData);die;
         $sum = 0;
         foreach ($tradeData as $value) {
             $sum += ($value->salePrice - $value->buyPrice) * $value->amount;
