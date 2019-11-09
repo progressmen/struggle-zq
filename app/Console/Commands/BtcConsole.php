@@ -44,5 +44,10 @@ class BtcConsole extends Command
             $oneObj = new ActionOne();
             $oneObj->exec();
         }
+
+        if($command == 'test'){
+            $oneObj = new Btc\Orders();
+            $oneObj->getAccountAccounts();
+        }
     }
 }
