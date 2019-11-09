@@ -38,7 +38,8 @@ class BtcConsole extends Command
      * @return mixed
      */
     public function handle()
-    {
+	{
+		echo 'actionone';
         $command = $this->argument('cmd');
         if($command == 'one'){
             $oneObj = new ActionOne();
