@@ -39,7 +39,7 @@ class BtcConsole extends Command
      */
     public function handle()
 	{
-		// 注释123
+		// 注释1234
         $command = $this->argument('cmd');
         if($command == 'one'){
             $oneObj = new ActionOne();
