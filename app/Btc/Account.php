@@ -28,7 +28,8 @@ class Account extends HuobiBase
         $this->req_method = 'GET';
         $url = $this->create_sign_url([]);
         $result = $this->curl($url);
-        Cache::put('zqAccounts', $result,24 * 3600 * 30);
+        $res = Cache::put('zqAccounts', $result,24 * 3600 * 30);
+        var_dump($res);
         return $result;
     }
 
