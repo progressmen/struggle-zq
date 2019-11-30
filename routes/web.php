@@ -44,6 +44,7 @@ Route::get('accounts', function (App\Btc\Account $account, Request $request) {
 Route::get('balance', function (App\Btc\Account $account, Request $request) {
 
     $signKey = 'wangzhaoqistruggle';
+
     $token = $request->input('s');
     if ($token !== md5($signKey . strtotime('today'))) {
         header('HTTP/1.1 403 Forbidden');
