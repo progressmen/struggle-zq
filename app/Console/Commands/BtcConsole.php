@@ -46,6 +46,7 @@ class BtcConsole extends Command
         if (empty($accountInfo)) {
             $oneObj = new Btc\Account();
             $accountInfo = $oneObj->getAccountAccounts();
+            var_dump($accountInfo);
         }
 
         // 获取命令
