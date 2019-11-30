@@ -20,6 +20,10 @@ Route::get('timestamp', function (App\Btc\Account $timestamp) {
 });
 
 Route::get('accounts', function (App\Btc\Account $account) {
+
+    $signKey = 'wangzhaoqistruggle';
+    echo md5($signKey . strtotime('today'));die;
+
     return $account->getAccountAccounts();
 });
 
