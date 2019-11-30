@@ -19,11 +19,13 @@ Route::get('timestamp', function (App\Btc\Account $timestamp) {
     return $timestamp->getCommonTimestamp();
 });
 
-Route::get('accounts', function (App\Btc\Account $account) {
+Route::get('accounts', function (App\Btc\Account $account, Illuminate\Http\Request $request) {
 
     $signKey = 'wangzhaoqistruggle';
-    echo md5($signKey . strtotime('today'));die;
-
+    $token = $request->input('s');
+    if($token !== md5($signKey . strtotime('today'))){
+        header('HTTP/1.1 403 Forbidden');
+    }
     return $account->getAccountAccounts();
 });
 
