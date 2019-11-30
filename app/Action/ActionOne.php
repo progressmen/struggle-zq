@@ -51,6 +51,12 @@ class ActionOne
             }
         }
 
+        // 如果小于5个则不购买
+        if(count($sortValue) < 5){
+            echo date('Y-m-d H:i:s') . 'LESS 5' . PHP_EOL;
+            return false;
+        }
+
         // 按交易量倒序排列
         $vol = array_column($sortValue, 'vol');
         array_multisort($vol, SORT_DESC, $sortValue);
