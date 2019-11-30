@@ -18,9 +18,9 @@ class Account extends HuobiBase
      */
     function getAccountAccounts()
     {
+        // $zqAccounts = Cache::forget('zqAccounts');dd($zqAccounts);
         $zqAccounts = Cache::get('zqAccounts');
         if(!empty($zqAccounts)){
-            var_dump($zqAccounts);
             return $zqAccounts;
         }
 
@@ -28,8 +28,7 @@ class Account extends HuobiBase
         $this->req_method = 'GET';
         $url = $this->create_sign_url([]);
         $result = $this->curl($url);
-        $res = Cache::put('zqAccounts', $result,24 * 3600 * 30);
-        var_dump($res);die;
+        Cache::add('zqAccounts', $result,24 * 3600 * 30);
         return $result;
     }
 
@@ -62,7 +61,6 @@ class Account extends HuobiBase
                     $this->req_method = 'GET';
                     $url = $this->create_sign_url([]);
                     $result = $this->curl($url);
-                    $result = json_decode($result, true);
                     $newList = [];
                     foreach ($result['data']['list'] as $v){
                         if(!empty($v['balance'])) {

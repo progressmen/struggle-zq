@@ -84,6 +84,7 @@ class HuobiBase extends Model
         $output = curl_exec($ch);
         $info = curl_getinfo($ch);
         curl_close($ch);
+        $output = json_decode($output,true);
         return $output;
     }
 }
