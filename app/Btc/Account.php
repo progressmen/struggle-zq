@@ -20,6 +20,7 @@ class Account extends HuobiBase
     {
         $zqAccounts = Cache::get('zqAccounts');
         if(!empty($zqAccounts)){
+            var_dump($zqAccounts);
             return $zqAccounts;
         }
 
