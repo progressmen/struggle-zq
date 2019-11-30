@@ -2,6 +2,8 @@
 
 namespace App\Btc;
 
+use Illuminate\Support\Facades\Cache;
+
 class Account extends HuobiBase
 {
     public function __construct(array $attributes = [])
@@ -16,10 +18,16 @@ class Account extends HuobiBase
      */
     function getAccountAccounts()
     {
+        $zqAccounts = Cache::get('zqAccounts');
+        if(!empty($zqAccounts)){
+            return $zqAccounts;
+        }
+
         $this->api_method = "/v1/account/accounts";
         $this->req_method = 'GET';
         $url = $this->create_sign_url([]);
         $result = $this->curl($url);
+        Cache::put('zqAccounts', $result,24 * 3600 * 30);
         return $result;
     }
 

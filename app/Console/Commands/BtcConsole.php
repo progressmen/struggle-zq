@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Action\ActionOne;
 use App\Btc;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class BtcConsole extends Command
 {
@@ -38,22 +39,27 @@ class BtcConsole extends Command
      * @return mixed
      */
     public function handle()
-	{
+    {
+
+        // 获取账户信息
+        $accountInfo = Cache::get('zqAccounts');
+        if (empty($accountInfo)) {
+            $oneObj = new Btc\Account();
+            $accountInfo = $oneObj->getAccountAccounts();
+        }
+
+        // 获取命令
         $command = $this->argument('cmd');
-        if($command == 'one'){
+
+        if ($command == 'one') {
             $oneObj = new ActionOne();
             $oneObj->exec();
-        }
-
-
-        if($command == 'gets'){
+        } elseif ($command == 'gets') {
             echo '?s=' . md5('wangzhaoqistruggle' . strtotime('today')) . PHP_EOL;
             exit();
+        } else {
+            dd('try another comds');
         }
 
-        if($command == 'test'){
-            $oneObj = new Btc\Orders();
-            $oneObj->getAccountAccounts();
-        }
     }
 }
