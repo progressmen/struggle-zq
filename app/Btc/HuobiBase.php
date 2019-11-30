@@ -19,8 +19,8 @@ class HuobiBase extends Model
 
         $this->api = parse_url($this->url)['host'];
 
-//        date_default_timezone_set("Etc/GMT+0");
-        date_default_timezone_set("PRC");
+        date_default_timezone_set("Etc/GMT+0");
+//        date_default_timezone_set("PRC");
 //        date_default_timezone_set("Asia/Shanghai");
         $this->accessKey = env('HUOBI_ACCESS_KEY');
         $this->secretKey = env('HUOBI_SECRET_KEY');
