@@ -45,6 +45,12 @@ class BtcConsole extends Command
             $oneObj->exec();
         }
 
+
+        if($command == 'gets'){
+            echo '?s=' . md5('wangzhaoqistruggle' . strtotime('today')) . PHP_EOL;
+            exit();
+        }
+
         if($command == 'test'){
             $oneObj = new Btc\Orders();
             $oneObj->getAccountAccounts();
