@@ -36,7 +36,7 @@ class ActionOne
         // 检查当前有没有已购买的币
         $saleData = $this->tradeObj->getTrade(['saleStatus' => 0]);
         if (!empty($saleData)) {
-            echo date('Y-m-d H:i:s') . ' NO TRADE' . PHP_EOL;
+            echo date('Y-m-d H:i:s') . ' ON THE TRADE' . PHP_EOL;
             return false;
         }
 
