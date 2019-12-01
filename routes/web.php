@@ -11,6 +11,7 @@
 |
 */
 
+use App\Btc\Orders;
 use Illuminate\Http\Request;
 
 Route::get('/', function () {
@@ -66,6 +67,8 @@ Route::get('actionOne', function (App\Action\ActionOne $actionOne, Request $requ
     return $actionOne->exec();
 });
 
+
+// 下单
 Route::get('placeorder', function (App\Btc\Orders $orders, Request $request) {
 
     $signKey = 'wangzhaoqistruggle';
@@ -83,6 +86,31 @@ Route::get('placeorder', function (App\Btc\Orders $orders, Request $request) {
     $type='buy-limit';
 
     return $orders->placeOrder($clientOrderId,$account_id,$amount,$price,$symbol,$type);
+    /*
+      {
+        "status": "ok",
+        "data": "58234589524"
+      }
+     */
+});
+
+// 下单
+Route::get('getorder', function (App\Btc\Orders $orders, Request $request) {
+
+    $signKey = 'wangzhaoqistruggle';
+    $token = $request->input('s');
+    if ($token !== md5($signKey . strtotime('today'))) {
+        header('HTTP/1.1 403 Forbidden');
+        exit();
+    }
+
+    return $orders->getOrder('58234589524');
+    /*
+      {
+        "status": "ok",
+        "data": "58234589524"
+      }
+     */
 });
 
 

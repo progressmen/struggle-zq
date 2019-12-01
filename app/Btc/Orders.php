@@ -36,62 +36,26 @@ class Orders extends HuobiBase
         return $return;
     }
 
+    // 申请撤销一个订单请求
+    function cancelOrder($order_id) {
+        $source = 'api';
+        $this->api_method = '/v1/order/orders/'.$order_id.'/submitcancel';
+        $this->req_method = 'POST';
+        $postdata = [];
+        $url = $this->create_sign_url();
+        $return = $this->curl($url,$postdata);
+        return $return;
+    }
 
-    /**
-     * 获取账户信息
-     * https://huobiapi.github.io/docs/spot/v1/cn/#bd9157656f
-     */
-    function getAccountAccounts()
-    {
-        $this->api_method = "/v1/account/accounts";
+    // 查询某个订单详情
+    function getOrder($order_id) {
+        $this->api_method = '/v1/order/orders/'.$order_id;
         $this->req_method = 'GET';
-        $url = $this->create_sign_url([]);
-        $result = $this->curl($url);
-        return $result;
+        $url = $this->create_sign_url();
+        $return = $this->curl($url);
+        return $return;
     }
 
-    /**
-     * 查询系统当前时间
-     */
-    function getCommonTimestamp()
-    {
-        $this->api_method = "/v1/common/timestamp";
-        $this->req_method = 'GET';
-        $url = $this->create_sign_url([]);
-        $result = $this->curl($url);
-        return $result;
-    }
 
-    /**
-     * 获取账户余额
-     * https://huobiapi.github.io/docs/spot/v1/cn/#870c0ab88b
-     */
-    function getBalance()
-    {
-        // 获取账户
-        $accountData = $this->getAccountAccounts();
-        $accountData = json_decode($accountData, true);
-        if ($accountData['status'] == 'ok') {
-            foreach ($accountData['data'] as $value) {
-                if($value['type'] == 'spot') {
-                    $accountId = $value['id'];
-                    $this->api_method = "/v1/account/accounts/{$accountId}/balance";
-                    $this->req_method = 'GET';
-                    $url = $this->create_sign_url([]);
-                    $result = $this->curl($url);
-                    $result = json_decode($result, true);
-                    $newList = [];
-                    foreach ($result['data']['list'] as $v){
-                        if(!empty($v['balance'])) {
-                            $newList[] = $v;
-                        }
-                    }
-                    $result['data']['list'] = $newList;
-                    echo json_encode($result);
-                }
-            }
-        } else {
-            echo '请求账户失败';
-        }
-    }
+
 }
