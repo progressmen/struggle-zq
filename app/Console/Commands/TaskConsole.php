@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Btc\Orders;
 use App\Db\Task;
 use App\Db\Trade;
 use App\Mail\CommonMail;
@@ -57,36 +58,41 @@ class TaskConsole extends Command
             echo date('YmdHis') . ' EMPTY TASK' . PHP_EOL;
         } else {
 
-            // 查询交易结果
-
-
             // 查询交易数据
             $tradeData = $tradeObj->getTrade(['id' => $taskData[0]->tradeId]);
 
-            // 修改数据表状态
-            // 开启事务
-            DB::beginTransaction();
+            // 查询交易结果
+            $orderObj = new Orders();
+            $orderInfo = $orderObj->getOrder($taskData[0]->hbOrderId);
 
-            // 更新任务表
-            $taskRes = $taskObj->updateTask(['id' => $taskData[0]->id], ['status' => 1]);
+            // 当订单完全成交
+            if ($orderInfo['status'] == 'ok' && $orderInfo['data']['state'] == 'filled') {
 
-            if ($taskData[0]->type == 1) { // 买入
-                $tradeUpdateData = ['buyStatus' => 1, 'buyEndTime' => time()];
-            } else { // 卖出
-                $tradeUpdateData = ['saleStatus' => 1, 'saleEndTime' => time()];
+                // 开启事务
+                DB::beginTransaction();
+
+                // 更新任务表
+                $taskRes = $taskObj->updateTask(['id' => $taskData[0]->id], ['status' => 1]);
+
+                if ($taskData[0]->type == 1) { // 买入
+                    $tradeUpdateData = ['buyStatus' => 1, 'buyEndTime' => time()];
+                } else { // 卖出
+                    $tradeUpdateData = ['saleStatus' => 1, 'saleEndTime' => time()];
+                }
+                $tradeRes = $tradeObj->updateTrade(['id' => $taskData[0]->tradeId], $tradeUpdateData);
+
+                if ($tradeRes === false || $taskRes === false) {
+                    echo date('YmdHis') . ' DB ERROR TASK' . PHP_EOL;
+                    DB::rollBack();
+                } else {
+                    $message = $taskData[0]->type == 1 ? '买入' : '卖出';
+                    $message = '交易id:' . $taskData[0]->tradeId . $message . '成功' . ' symbol:' . $tradeData[0]->symbol;
+                    $mailObj->normalMail($message);
+                    echo date('YmdHis') . ' SUCCESS TASK' . PHP_EOL;
+                    DB::commit();
+                }
             }
-            $tradeRes = $tradeObj->updateTrade(['id' => $taskData[0]->tradeId], $tradeUpdateData);
 
-            if ($tradeRes === false || $taskRes === false) {
-                echo date('YmdHis') . ' DB ERROR TASK' . PHP_EOL;
-                DB::rollBack();
-            } else {
-                $message = $taskData[0]->type == 1 ? '买入' : '卖出';
-                $message = '交易id:' . $taskData[0]->tradeId . $message . '成功' . ' symbol:' . $tradeData[0]->symbol;
-                $mailObj->normalMail($message);
-                echo date('YmdHis') . ' SUCCESS TASK' . PHP_EOL;
-                DB::commit();
-            }
         }
     }
 }

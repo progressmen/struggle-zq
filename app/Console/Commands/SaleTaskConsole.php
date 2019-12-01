@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Btc\Account;
 use App\Btc\Market;
+use App\Btc\Orders;
 use App\Db\Task;
 use App\Db\Trade;
 use App\Mail\CommonMail;
@@ -82,11 +84,23 @@ class SaleTaskConsole extends Command
                     || $huobiData[0]['price'] < $tradeData[0]->buyPrice * 0.97) {
 
                     // 创建卖单
+                    $orderObj = new Orders();
+                    $accountObj = new Account();
+                    $accountInfo = $accountObj->getAccountAccounts();
+                    $account_id = $accountInfo['data'][0]['id'];
+                    $clientOrderId = 'st' . date('YmdHis');
+                    $amount = $tradeData[0]->amount;
+                    $price = $huobiData[0]['price'];
+                    $symbol = $tradeData[0]->symbol;
+                    $type = 'sell-limit';
+                    $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $amount, $price, $symbol, $type);
 
                     // 开启事务
                     DB::beginTransaction();
 
                     $taskRes = $taskObj->insertTask([
+                        'clientOrderId' =>  $clientOrderId,
+                        'hbOrderId' => $placeRes['data'],
                         'tradeId' => $tradeData[0]->id,
                         'type' => 2,  // 卖出
                     ]);
@@ -97,7 +111,7 @@ class SaleTaskConsole extends Command
                     ];
                     $tradeRes = $tradeObj->updateTrade(['id' => $tradeData[0]->id], $tradeUpdateData);
 
-                    if ($tradeRes === false || $taskRes === false) {
+                    if ($tradeRes === false || $taskRes === false || $placeRes['status'] != 'ok') {
                         echo date('YmdHis') . ' DB ERROR TRADE' . PHP_EOL;
                         DB::rollBack();
                     } else {

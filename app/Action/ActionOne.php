@@ -2,7 +2,9 @@
 
 namespace App\Action;
 
+use App\Btc\Account;
 use App\Btc\Market;
+use App\Btc\Orders;
 use App\Db\Task;
 use App\Db\Trade;
 use App\Mail\CommonMail;
@@ -52,7 +54,7 @@ class ActionOne
         }
 
         // 如果小于5个则不购买
-        if(count($sortValue) < 5){
+        if (count($sortValue) < 5) {
             echo date('Y-m-d H:i:s') . 'LESS 5' . PHP_EOL;
             return false;
         }
@@ -70,32 +72,44 @@ class ActionOne
         if (!empty($qualityData)) {
 
             // 请求交易接口
-
+            $orderObj = new Orders();
+            $accountObj = new Account();
+            $accountInfo = $accountObj->getAccountAccounts();
+            $account_id = $accountInfo['data'][0]['id'];
+            $clientOrderId = 'st' . date('YmdHis');
+            $money = 460;
+            $amount = floatval($money / $qualityData[0]['close']);
+            $price = $qualityData[0]['close'];
+            $symbol = $qualityData[0]['symbol'];
+            $type = 'buy-limit';
+            $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $amount, $price, $symbol, $type);
 
             // 开启事务
             DB::beginTransaction();
 
-            $money = 460;
-            $amount = floatval($money/ $qualityData[0]['close']);
             // 插入交易记录
             $tradeRes = $this->tradeObj->insertTrade([
                 'amount' => $amount,
-                'symbol' => $qualityData[0]['symbol'],
-                'buyPrice' => $qualityData[0]['close'],
+                'symbol' => $symbol,
+                'buyPrice' => $price,
             ]);
 
             // 插入任务表
+
             $taskRes = $this->taskObj->insertTask([
+                'clientOrderId' => $clientOrderId,
+                'hbOrderId' => $placeRes['data'],
                 'tradeId' => $tradeRes,
                 'type' => 1,
             ]);
 
-            if ($tradeRes === false || $taskRes === false) {
+
+            if ($tradeRes === false || $taskRes === false || $placeRes['status'] != 'ok') {
                 DB::rollBack();
             } else {
                 DB::commit();
                 $mailObj = new CommonMail();
-                $mailObj->normalMail('买单ID：'.$tradeRes.' 创建买单成功 symbol:' . $qualityData[0]['symbol']);
+                $mailObj->normalMail('买单ID：' . $tradeRes . ' 创建买单成功 symbol:' . $qualityData[0]['symbol'] . ' 买入价格：' . $qualityData[0]['close']);
             }
 
             echo date('Y-m-d H:i:s') . $qualityData[0]['symbol'] . ' SUCCESS' . PHP_EOL;
@@ -174,7 +188,6 @@ class ActionOne
     {
         return array_sum($arr) / count($arr);
     }
-
 
 
     /**
