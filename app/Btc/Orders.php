@@ -38,7 +38,6 @@ class Orders extends HuobiBase
 
     // 申请撤销一个订单请求
     function cancelOrder($order_id) {
-        $source = 'api';
         $this->api_method = '/v1/order/orders/'.$order_id.'/submitcancel';
         $this->req_method = 'POST';
         $postdata = [];
