@@ -11,7 +11,13 @@ class Orders extends HuobiBase
 
     /**
      * 交易类API
-     * @param string $type buy-market：市价买, sell-market：市价卖, buy-limit：限价买, sell-limit：限价卖, buy-ioc：IOC买单, sell-ioc：
+     * @param $clientOrderId
+     * @param int $account_id
+     * @param int $amount
+     * @param int $price string
+     * @param string $symbol
+     * @param string $type  buy-market：市价买, sell-market：市价卖, buy-limit：限价买, sell-limit：限价卖, buy-ioc：IOC买单, sell-ioc：
+     * @return bool|mixed|string
      */
     // 下单
     function placeOrder($clientOrderId,$account_id=0,$amount=0,$price=0,$symbol='',$type='') {
@@ -36,6 +42,7 @@ class Orders extends HuobiBase
         return $return;
     }
 
+
     // 申请撤销一个订单请求
     function cancelOrder($order_id) {
         $this->api_method = '/v1/order/orders/'.$order_id.'/submitcancel';
@@ -45,6 +52,7 @@ class Orders extends HuobiBase
         $return = $this->curl($url,$postdata);
         return $return;
     }
+
 
     // 查询某个订单详情
     function getOrder($order_id) {

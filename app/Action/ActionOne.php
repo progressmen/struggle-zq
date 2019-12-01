@@ -36,7 +36,7 @@ class ActionOne
         // 检查当前有没有已购买的币
         $saleData = $this->tradeObj->getTrade(['saleStatus' => 0]);
         if (!empty($saleData)) {
-            echo date('Y-m-d H:i:s') . 'ON TRADE' . PHP_EOL;
+            echo date('Y-m-d H:i:s') . ' NO TRADE' . PHP_EOL;
             return false;
         }
 
@@ -83,6 +83,7 @@ class ActionOne
             $symbol = $qualityData[0]['symbol'];
             $type = 'buy-limit';
             $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $amount, $price, $symbol, $type);
+            echo '下单数据: ' . json_encode($placeRes) . PHP_EOL;
 
             // 开启事务
             DB::beginTransaction();
