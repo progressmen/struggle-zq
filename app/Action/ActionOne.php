@@ -55,7 +55,7 @@ class ActionOne
 
         // 如果小于5个则不购买
         if (count($sortValue) < 5) {
-            echo date('Y-m-d H:i:s') . 'LESS 5' . PHP_EOL;
+            echo date('Y-m-d H:i:s') . ' LESS 5' . PHP_EOL;
             return false;
         }
 
