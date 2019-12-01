@@ -78,7 +78,7 @@ Route::get('placeorder', function (App\Btc\Orders $orders, Request $request) {
         exit();
     }
 
-    $clientOrderId = 'st000001';
+    $clientOrderId = 'st000002';
     $account_id = 9016902;
     $amount = 20;
     $price=0.21;
@@ -139,7 +139,10 @@ Route::get('cancelorder', function (App\Btc\Orders $orders, Request $request) {
 
     return $orders->cancelOrder('58234589524');
     /*
-
+    {
+        "status": "ok",
+        "data": "58234589524"
+    }
      */
 });
 
