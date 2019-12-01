@@ -66,6 +66,25 @@ Route::get('actionOne', function (App\Action\ActionOne $actionOne, Request $requ
     return $actionOne->exec();
 });
 
+Route::get('placeorder', function (App\Btc\Orders $orders, Request $request) {
+
+    $signKey = 'wangzhaoqistruggle';
+    $token = $request->input('s');
+    if ($token !== md5($signKey . strtotime('today'))) {
+        header('HTTP/1.1 403 Forbidden');
+        exit();
+    }
+
+    $clientOrderId = 'st000001';
+    $account_id = 9016902;
+    $amount = 20;
+    $price=0.21;
+    $symbol='xrpusdt';
+    $type='buy-limit';
+
+    return $orders->placeOrder($clientOrderId,$account_id,$amount,$price,$symbol,$type);
+});
+
 
 # Route::any('mail/send', 'MailController@send');
 
