@@ -115,13 +115,15 @@ class ActionOne
 
             if ($tradeRes === false || $taskRes === false || $placeRes['status'] != 'ok') {
                 DB::rollBack();
+                echo date('Y-m-d H:i:s') . $qualityData[0]['symbol'] . ' FAILED' . PHP_EOL;
             } else {
                 DB::commit();
                 $mailObj = new CommonMail();
                 $mailObj->normalMail('买单ID：' . $tradeRes . ' 创建买单成功 symbol:' . $qualityData[0]['symbol'] . ' 买入价格：' . $qualityData[0]['close']);
+                echo date('Y-m-d H:i:s') . $qualityData[0]['symbol'] . ' SUCCESS' . PHP_EOL;
             }
 
-            echo date('Y-m-d H:i:s') . $qualityData[0]['symbol'] . ' SUCCESS' . PHP_EOL;
+
         }
 
     }
