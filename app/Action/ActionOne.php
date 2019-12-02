@@ -78,7 +78,7 @@ class ActionOne
             $account_id = $accountInfo['data'][0]['id'];
             $clientOrderId = 'st' . date('YmdHis');
             $money = 200;
-            $amount = floatval($money / $qualityData[0]['close']);
+            $amount = round(floatval($money / $qualityData[0]['close']),3);
             $price = $qualityData[0]['close'];
             $symbol = $qualityData[0]['symbol'];
             $type = 'buy-limit';
