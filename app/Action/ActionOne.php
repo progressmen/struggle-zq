@@ -45,10 +45,10 @@ class ActionOne
         $usdtData = $tickerData['usdt'];
 
 
-        // 取出涨幅超过5%的数据
+        // 取出涨幅超过3%的数据
         $sortValue = [];
         foreach ($usdtData as $value) {
-            if ($value['percent'] > 5) {
+            if ($value['percent'] > 3) {
                 $sortValue[] = $value;
             }
         }
