@@ -39,6 +39,7 @@ class Orders extends HuobiBase
         }
         $url = $this->create_sign_url();
         $return = $this->curl($url,$postdata);
+        echo '下单数据: input: ' . json_encode($postdata) . ' output: ' . json_encode($return) . PHP_EOL;
         return $return;
     }
 
