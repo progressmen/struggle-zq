@@ -48,14 +48,14 @@ class ActionOne
         // 取出涨幅超过3%的数据
         $sortValue = [];
         foreach ($usdtData as $value) {
-            if ($value['percent'] > 3) {
+            if ($value['percent'] > 5) {
                 $sortValue[] = $value;
             }
         }
 
         // 如果小于5个则不购买
-        if (count($sortValue) < 5) {
-            echo date('Y-m-d H:i:s') . ' LESS 5' . PHP_EOL;
+        if (count($sortValue) < 3) {
+            echo date('Y-m-d H:i:s') . ' MORE 5% LESS 3' . PHP_EOL;
             return false;
         }
 
