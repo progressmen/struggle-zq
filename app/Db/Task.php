@@ -30,6 +30,8 @@ class Task
     function insertTask($data)
     {
         $addData = [
+            'clientOrderId',
+            'hbOrderId',
             'tradeId',
             'type',
         ];
