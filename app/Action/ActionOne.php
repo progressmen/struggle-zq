@@ -82,8 +82,16 @@ class ActionOne
             $price = $qualityData[0]['close'];
             $symbol = $qualityData[0]['symbol'];
             $type = 'buy-limit';
+            $input = array(
+                'clientOrderId' =>$clientOrderId,
+                'account_id' =>$account_id,
+                'amount' =>$amount,
+                'price' =>$price,
+                'symbol' =>$symbol,
+                'type' =>$type,
+            );
             $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $amount, $price, $symbol, $type);
-            echo '下单数据: ' . json_encode($placeRes) . PHP_EOL;
+            echo '下单数据: input: ' . json_encode($input) . ' output: ' . json_encode($placeRes) . PHP_EOL;
 
             // 开启事务
             DB::beginTransaction();
