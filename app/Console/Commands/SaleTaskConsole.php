@@ -89,7 +89,7 @@ class SaleTaskConsole extends Command
                     $accountInfo = $accountObj->getAccountAccounts();
                     $account_id = $accountInfo['data'][0]['id'];
                     $clientOrderId = 'st' . date('YmdHis');
-                    $amount = $tradeData[0]->amount;
+                    $amount = round(floatval($tradeData[0]->amount);
                     $price = $huobiData[0]['price'];
                     $symbol = $tradeData[0]->symbol;
                     $type = 'sell-limit';
