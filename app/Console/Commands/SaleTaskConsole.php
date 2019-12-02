@@ -83,13 +83,36 @@ class SaleTaskConsole extends Command
                 if ($huobiData[0]['price'] > $tradeData[0]->buyPrice * 1.03
                     || $huobiData[0]['price'] < $tradeData[0]->buyPrice * 0.97) {
 
+
+
+
                     // 创建卖单
                     $orderObj = new Orders();
                     $accountObj = new Account();
+
+                    // 获取账户余额
+                    $balanceData = $accountObj->getBalance();
+                    if($balanceData['status'] != 'ok' || empty($balanceData['data']['list'])){
+                        echo date('YmdHis') . ' GET BALANCE ERROR ' . PHP_EOL;
+                        return false;
+                    }
+
+                    $amount = '';
+                    foreach ($balanceData['data']['list'] as $val){
+                        if($val['currency'] . 'usdt' == $tradeData[0]->symbol){
+                            $amount = $val['balance'];
+                        }
+                    }
+
+                    if(empty($amount)){
+                        echo date('YmdHis') . ' GET AMOUNT ERROR ' . PHP_EOL;
+                        return false;
+                    }
+
                     $accountInfo = $accountObj->getAccountAccounts();
                     $account_id = $accountInfo['data'][0]['id'];
                     $clientOrderId = 'st' . date('YmdHis');
-                    $amount = round(floatval($tradeData[0]->amount));
+                    $amount = floor($amount * 100) / 100;
                     $price = $huobiData[0]['price'];
                     $symbol = $tradeData[0]->symbol;
                     $type = 'sell-limit';
