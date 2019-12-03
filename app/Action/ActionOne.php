@@ -48,7 +48,7 @@ class ActionOne
         // 取出涨幅超过3%的数据
         $sortValue = [];
         foreach ($usdtData as $value) {
-            if ($value['percent'] > 2) {
+            if ($value['percent'] > 2 && $value['percent'] < 10) {
                 $sortValue[] = $value;
             }
         }
@@ -68,6 +68,7 @@ class ActionOne
 
         // 1分钟维度10分钟呈上升趋势
         $qualityData = $this->getOneMinuteQualityData($fiveQualityData);
+        echo date('Y-m-d H:i:s') . ' qualityData : ' .json_encode($qualityData). PHP_EOL;
 
         if (!empty($qualityData)) {
 
@@ -132,7 +133,7 @@ class ActionOne
             if (empty($minuteData)) {
                 continue;
             }
-            echo 'getTrendFiveMinute:' . json_encode($minuteData) . PHP_EOL;
+//            echo 'getTrendFiveMinute:' . json_encode($minuteData) . PHP_EOL;
 
             // 求平均值
             $closePrice = array_column($minuteData, 'close');
