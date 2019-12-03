@@ -81,7 +81,7 @@ class SaleTaskConsole extends Command
                 }
 
                 if ($huobiData[0]['price'] > $tradeData[0]->buyPrice * 1.04
-                    || $huobiData[0]['price'] < $tradeData[0]->buyPrice * 0.97) {
+                    || $huobiData[0]['price'] < $tradeData[0]->buyPrice * 0.97 || $tradeData[0]->isSale == 1) {
 
                     // 创建卖单
                     $orderObj = new Orders();
