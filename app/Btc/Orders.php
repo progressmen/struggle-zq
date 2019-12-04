@@ -13,7 +13,7 @@ class Orders extends HuobiBase
      * 交易类API
      * @param $clientOrderId
      * @param int $account_id
-     * @param int $amount
+     * @param int $amount 市价购买此字段为交易额
      * @param int $price string
      * @param string $symbol
      * @param string $type  buy-market：市价买, sell-market：市价卖, buy-limit：限价买, sell-limit：限价卖, buy-ioc：IOC买单, sell-ioc：

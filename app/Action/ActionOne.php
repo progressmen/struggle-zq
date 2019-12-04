@@ -82,8 +82,8 @@ class ActionOne
             $amount = round(floatval($money / $qualityData[0]['close']), 2);
             $price = $qualityData[0]['close'];
             $symbol = $qualityData[0]['symbol'];
-            $type = 'buy-limit';
-            $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $amount, $price, $symbol, $type);
+            $type = 'buy-market';
+            $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $money, $price, $symbol, $type);
 
             // 开启事务
             DB::beginTransaction();
