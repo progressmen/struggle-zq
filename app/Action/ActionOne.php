@@ -53,9 +53,9 @@ class ActionOne
             }
         }
 
-        // 如果小于6个则不购买
-        if (count($sortValue) < 8) {
-            echo date('Y-m-d H:i:s') . ' MORE 2% LESS 8' . PHP_EOL;
+        // 如果小于5个则不购买
+        if (count($sortValue) < 5) {
+            echo date('Y-m-d H:i:s') . ' MORE 2% LESS 5' . PHP_EOL;
             return false;
         }
 
