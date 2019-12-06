@@ -112,7 +112,7 @@ class SaleTaskConsole extends Command
                     $amount = floor($amount * 100) / 100;
                     $price = $huobiData[0]['price'];
                     $symbol = $tradeData[0]->symbol;
-                    $type = 'sell-market';
+                    $type = 'sell-limit';
                     $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $amount, $price, $symbol, $type);
 
                     // 开启事务
