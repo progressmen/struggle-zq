@@ -110,10 +110,9 @@ class SaleTaskConsole extends Command
                     $account_id = $accountInfo['data'][0]['id'];
                     $clientOrderId = 'st' . date('YmdHis');
                     $amount = floor($amount * 100) / 100;
-                    $price = $huobiData[0]['price'];
                     $symbol = $tradeData[0]->symbol;
-                    $type = 'sell-limit';
-                    $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $amount, $price, $symbol, $type);
+                    $type = 'sell-market';
+                    $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $amount, $symbol, $type, 0);
 
                     // 开启事务
                     DB::beginTransaction();

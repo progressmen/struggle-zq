@@ -85,7 +85,7 @@ Route::get('placeorder', function (App\Btc\Orders $orders, Request $request) {
     $symbol='xrpusdt';
     $type='buy-limit';
 
-    return $orders->placeOrder($clientOrderId,$account_id,$amount,$price,$symbol,$type);
+    return $orders->placeOrder($clientOrderId,$account_id,$amount,$symbol,$type,$price);
     /*
       {
         "status": "ok",

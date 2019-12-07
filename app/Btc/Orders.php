@@ -20,7 +20,7 @@ class Orders extends HuobiBase
      * @return bool|mixed|string
      */
     // 下单
-    function placeOrder($clientOrderId,$account_id=0,$amount=0,$price=0,$symbol='',$type='') {
+    function placeOrder($clientOrderId,$account_id=0,$amount=0,$symbol='',$type='',$price=0) {
 
         $source = 'api';
         $this->api_method = "/v1/order/orders/place";
