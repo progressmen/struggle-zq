@@ -99,7 +99,7 @@ class SaleTaskConsole extends Command
                         $price = 0;
                     }
 
-                    // 创建卖单
+                    // 创建卖单 
                     $amount = $this->accountObj->getAcountBalance($tradeData[0]->symbol);
                     if ($amount === false) {
                         return $amount;
