@@ -99,7 +99,7 @@ class SaleTaskConsole extends Command
                         $price = 0;
                     }
 
-                    // 创建卖单 
+                    // 创建卖单
                     $amount = $this->accountObj->getAcountBalance($tradeData[0]->symbol);
                     if ($amount === false) {
                         return $amount;
@@ -157,14 +157,14 @@ class SaleTaskConsole extends Command
                     $this->updateTradeAndTask($clientOrderId, $placeRes, $tradeData, $huobiData);
 
                 } else {
+                    $tradeUpdateData = [
+                        'nowPrice' => $huobiData[0]['price'],
+                    ];
                     // 更新表最高价格
                     if ($huobiData[0]['price'] > $tradeData[0]->tallPrice) {
-                        $tradeUpdateData = [
-                            'tallPrice' => $huobiData[0]['price'],
-                        ];
-                        $this->tradeObj->updateTrade(['id' => $tradeData[0]->id], $tradeUpdateData);
+                        $tradeUpdateData['tallPrice'] = $huobiData[0]['price'];
                     }
-
+                    $this->tradeObj->updateTrade(['id' => $tradeData[0]->id], $tradeUpdateData);
                     echo date('YmdHis') . ' NO NEED HANDEL' . PHP_EOL;
                 }
             }
