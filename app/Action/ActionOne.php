@@ -83,7 +83,8 @@ class ActionOne
             $price = $qualityData[0]['close'];
             $symbol = $qualityData[0]['symbol'];
             $type = 'buy-market';
-            $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $money,  $symbol, $type, 0);
+            // 市场价买入 amount字段传买入价格
+            $placeRes = $orderObj->placeOrder($clientOrderId, $account_id, $money,  $symbol, $type);
 
             // 开启事务
             DB::beginTransaction();

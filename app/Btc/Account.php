@@ -74,4 +74,33 @@ class Account extends HuobiBase
             echo '请求账户失败';
         }
     }
+
+    /**
+     * 获取指定货币账户余额
+     * @param $symbol
+     * @return bool|string
+     */
+    public function getAcountBalance($symbol)
+    {
+
+        $balanceData = $this->getBalance();
+        if ($balanceData['status'] != 'ok' || empty($balanceData['data']['list'])) {
+            echo date('YmdHis') . ' GET BALANCE ERROR ' . PHP_EOL;
+            return false;
+        }
+
+        $amount = false;
+        foreach ($balanceData['data']['list'] as $val) {
+            if ($val['currency'] . 'usdt' == $symbol) {
+                $amount = $val['balance'];
+            }
+        }
+
+        if (empty($amount)) {
+            echo date('YmdHis') . ' GET AMOUNT ERROR ' . PHP_EOL;
+            return false;
+        }
+
+        return $amount;
+    }
 }
