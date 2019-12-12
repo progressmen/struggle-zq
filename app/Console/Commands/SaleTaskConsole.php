@@ -116,8 +116,8 @@ class SaleTaskConsole extends Command
 
 
                 } elseif ( // 涨幅卖出
-                    $huobiData[0]['price'] > $tradeData[0]->buyPrice * 1.04
-                    || $huobiData[0]['price'] < $tradeData[0]->buyPrice * 0.97
+                    $huobiData[0]['price'] > $tradeData[0]->buyPrice * 1.01
+                    || $huobiData[0]['price'] < $tradeData[0]->buyPrice * 0.99
                 ) {
 
                     // 创建卖单
@@ -136,27 +136,29 @@ class SaleTaskConsole extends Command
                     // 更新数据表
                     $this->updateTradeAndTask($clientOrderId, $placeRes, $tradeData, $huobiData);
 
-                } elseif ( // 有下降趋势
-                    $huobiData[0]['price'] > $tradeData[0]->buyPrice
-                    && $huobiData[0]['price'] < $tradeData[0]->tallPrice * 0.99
-                ) {
-                    // 创建卖单
-                    $amount = $this->accountObj->getAcountBalance($tradeData[0]->symbol);
-                    if ($amount === false) {
-                        return $amount;
-                    }
-                    $accountInfo = $this->accountObj->getAccountAccounts();
-                    $account_id = $accountInfo['data'][0]['id'];
-                    $clientOrderId = 'st' . date('YmdHis');
-                    $amount = floor($amount * 100) / 100;
-                    $symbol = $tradeData[0]->symbol;
-                    $type = 'sell-market';
-                    $placeRes = $this->orderObj->placeOrder($clientOrderId, $account_id, $amount, $symbol, $type);
-
-                    // 更新数据表
-                    $this->updateTradeAndTask($clientOrderId, $placeRes, $tradeData, $huobiData);
-
-                } else {
+                }
+//                elseif ( // 有下降趋势
+//                    $huobiData[0]['price'] > $tradeData[0]->buyPrice
+//                    && $huobiData[0]['price'] < $tradeData[0]->tallPrice * 0.99
+//                ) {
+//                    // 创建卖单
+//                    $amount = $this->accountObj->getAcountBalance($tradeData[0]->symbol);
+//                    if ($amount === false) {
+//                        return $amount;
+//                    }
+//                    $accountInfo = $this->accountObj->getAccountAccounts();
+//                    $account_id = $accountInfo['data'][0]['id'];
+//                    $clientOrderId = 'st' . date('YmdHis');
+//                    $amount = floor($amount * 100) / 100;
+//                    $symbol = $tradeData[0]->symbol;
+//                    $type = 'sell-market';
+//                    $placeRes = $this->orderObj->placeOrder($clientOrderId, $account_id, $amount, $symbol, $type);
+//
+//                    // 更新数据表
+//                    $this->updateTradeAndTask($clientOrderId, $placeRes, $tradeData, $huobiData);
+//
+//                }
+                else {
                     $tradeUpdateData = [
                         'nowPrice' => $huobiData[0]['price'],
                     ];

@@ -78,7 +78,7 @@ class ActionOne
             $accountInfo = $accountObj->getAccountAccounts();
             $account_id = $accountInfo['data'][0]['id'];
             $clientOrderId = 'st' . date('YmdHis');
-            $money = 200;
+            $money = 300;
             $amount = round(floatval($money / $qualityData[0]['close']), 2);
             $price = $qualityData[0]['close'];
             $symbol = $qualityData[0]['symbol'];
